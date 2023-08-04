@@ -9,36 +9,55 @@ const Signup=(props)=>{
     const navigate=useNavigate();
 const [errorSignUp,setErrorSignUp]=useState("");
 
+useEffect(()=>{
+
+  if(props.authorization!="")
+  {
+    navigate('/');
+  }
+
+},[props.authorization])
+
+
     const formik=useFormik({
         initialValues:{
             name:"",email:"",password:"",password_repeat:""
         },
         onSubmit:(values,SubmitProps)=>{
 
-           
-            let success=true;
-            if(localStorage.getItem(values.email))
-            success=false;
-            console.log(success);
-            if(success)
-            {
-                
-                SubmitProps.resetForm();
-                setErrorSignUp("");
-                localStorage[values.email]=JSON.stringify(values);
-                props.setUser(values.email);
-                navigate('/home');
-            }
-            else
-            {
-                setErrorSignUp("Email is already in use! Please Signin!");
-            }
+
+            fetch("http://127.0.0.1:3003/signup", { method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
             
+            body: JSON.stringify({
+                user: { username:values.name, email: values.email, password: values.password }
+              })
+            })
+.then(response => {
+    const authorizationHeader = response.headers.get('Authorization');
+  
+    localStorage.Authorization=authorizationHeader;
+    props.setAuthorization(authorizationHeader);
+    return response.json()} )
+.then(data => {
+  console.log(data);
+    SubmitProps.resetForm();
+    setErrorSignUp("");
+
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    setErrorSignUp("Email has already been taken");
+  });
+              
         },
         validationSchema:Yup.object({
             name:Yup.string().required("Required"),
             email:Yup.string().email("Invalid email format").required("Required"),
-            password:Yup.string().required("Password Cann't be empty"),
+            password:Yup.string().min(6,"Password is too short (minimum is 6 characters)").required("Password Cann't be empty"),
             password_repeat:Yup.string().required("Required").oneOf([Yup.ref('password')], 'Your passwords do not match.')
         })
     })
@@ -56,7 +75,7 @@ const [errorSignUp,setErrorSignUp]=useState("");
         
         <div className='field'>
           <label for="name">Name</label>
-          <input type="text" placeholder="Enter your Name" name="name" onBlur={formik.handleBlur} value={formik.values.name} onChange={formik.handleChange} />
+          <input type="text" placeholder="Enter User Name" name="name" onBlur={formik.handleBlur} value={formik.values.name} onChange={formik.handleChange} />
             {formik.touched.name && formik.errors.name?<div className='error'>{formik.errors.name}</div>:null}
             </div>
 

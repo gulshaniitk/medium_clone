@@ -1,0 +1,53 @@
+.post{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 20px 100px;
+    
+
+}
+
+.lower{
+    display: flex;
+    
+}
+
+.title{
+    font-size: 20px;
+    
+}
+
+.text{
+    font-size: 16px;
+    padding: 8px 0;
+    
+}
+
+.author{
+    font-size: 13px;
+    padding: 8px 0;
+    font-weight: 500;
+}
+
+.topic{
+    border-radius: 100px;
+    padding: 2px 8px;
+    border: 1px solid #F2F2F2;
+    color: #6B6B6B;
+    background-color: #F2F2F2;
+    
+}
+
+.date{
+    padding-right: 10px;
+}
+
+.left{
+    width: 80%;
+}
+
+.link{
+    text-decoration: none;
+    color: black;
+}

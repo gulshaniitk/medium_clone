@@ -5,29 +5,33 @@ import { createBrowserRouter,RouterProvider } from 'react-router-dom';
 import Navbar from './Components/Navbar/Navbar';
 import Signin from './Components/Signin/Signin';
 import Signup from './Components/Signup/Signup';
-import Home from './Components/Home/home';
 import Mypost from './Components/Mypost/Mypost';
 import Newpost from './Components/Mypost/Newpost';
 import Profile from './Components/Profile/Profile';
 import Signout from './Components/Signout/Signout';
+import Post from './Components/Home/Post';
+import Home from './Components/Home/Home';
 
 
 
 const App=()=>{
 
-const [user,setUser]=useState("");
-console.log(user);
+
+const [authorization,setAuthorization]=useState(localStorage.authorization==undefined?"":localStorage.authorization);
+
 
 const router=createBrowserRouter([
   {path:'/', 
-  element:<Navbar user={user}/>,
+  element:<Navbar authorization={authorization} setAuthorization={setAuthorization} />,
   children: [
-    {path:'',element:<Home user={user} />},
-    {path:'signin', element:<Signin setUser={setUser} />},
-    {path:'signup', element:<Signup setUser={setUser} />},
-    {path:'mypost',element:<Mypost user={user} />},
-    {path:'signout',element:<Signout  setUser={setUser} />},
-    {path:'profile',element:<Profile user={user}  />},
+    
+    {path:'/',element:<Home  authorization={authorization} setAuthorization={setAuthorization}  />},
+    {path:'/post/:id',element:<Post  authorization={authorization} setAuthorization={setAuthorization}  />},
+    {path:'/signin', element:<Signin  authorization={authorization} setAuthorization={setAuthorization} />},
+    {path:'/signup', element:<Signup  authorization={authorization} setAuthorization={setAuthorization}/>},
+    {path:'/mypost',element:<Mypost  authorization={authorization} setAuthorization={setAuthorization}  />},
+    {path:'/signout',element:<Signout   authorization={authorization} setAuthorization={setAuthorization} />},
+    {path:'/profile',element:<Profile   authorization={authorization} setAuthorization={setAuthorization}  />},
   ],
 },
 // {
@@ -36,6 +40,9 @@ const router=createBrowserRouter([
 
 
 ])
+
+
+
 
 return  (
     <RouterProvider router={router} />

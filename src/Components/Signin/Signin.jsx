@@ -9,32 +9,54 @@ const Signin = (props) => {
     const navigate=useNavigate();
     const [errorSignIn,setErrorSignIn]=useState("");
 
+    useEffect(()=>{
+
+      if(props.authorization!="")
+      {
+        navigate('/');
+      }
+
+    },[props.authorization])
+
     const formik=useFormik({
         initialValues:{
             email:"",password:""
         },
         onSubmit:(values,SubmitProps)=>{
-            console.log(SubmitProps);
-            let success=false;
 
-            if(localStorage.getItem(values.email) && JSON.parse(localStorage.getItem(values.email)).password==values.password)
-            {
-                success=true;
-            }
+          fetch("http://127.0.0.1:3003/login", { method: "POST",
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+          
+          body: JSON.stringify({
+              user: { email: values.email, password: values.password }
+            })
+          })
+.then(response => {
+  const authorizationHeader = response.headers.get('Authorization');
+   localStorage.Authorization=authorizationHeader;
+   props.setAuthorization(authorizationHeader);
+   console.log("token",localStorage.Authorization)
+  return response.json()} )
+.then(data => {
+  console.log(data);
+  SubmitProps.resetForm();
+  
+  setErrorSignIn("");
+  
+  
+  
+  
+})
+.catch(error => {
+  console.error('Error:', error);
+  setErrorSignIn("Email or Password is not correct!");
+});
 
-            if(success)
-            {
-               
-                SubmitProps.resetForm();
-                setErrorSignIn("");
-                props.setUser(values.email);
-                navigate('/');
-            }
-            else
-            {
-                setErrorSignIn("Email or Password is not correct!");
-            }
-        },
+           
+  },
         validationSchema:Yup.object({
             email:Yup.string().email("Invalid email format").required("Required"),
             password:Yup.string().required("Password Cann't be empty"),

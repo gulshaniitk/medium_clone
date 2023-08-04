@@ -1,0 +1,59 @@
+.like{
+    background-color: white;
+    border-radius: 100px;
+    padding: 5px;
+    width: 50px;
+}
+
+.follow{
+    color:rgb(12, 150, 180);
+    background-color: white;
+    border: 0px;
+    font-size: 18px;
+}
+
+.p_title{
+    font-size: 42px;
+}
+
+.p_author{
+    font-size: 16px;
+}
+
+.p_text{
+    font-size: 20px;
+}
+
+
+.post_byid{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 100px;
+}
+
+.like_view{
+    margin: 40px 100px;
+}
+
+#comment{
+    margin-left:40px;
+}
+
+#views{
+    margin-left: 40px;
+    border: 0px;
+    background-color: white;
+}
+
+.show_count{
+    padding: 10px;
+}
+
+#back{
+   padding: 10px;
+   font-size: 18px;
+   margin: 20px;
+}
+
