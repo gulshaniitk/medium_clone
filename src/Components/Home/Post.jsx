@@ -10,17 +10,25 @@ const Post=(props)=>{
     console.log(id);
 
     useEffect(()=>{
-        fetch(`http://127.0.0.1:3003/?${id}`).then((response)=>{
-        return response.json();
-        }).then((res)=>{
-          
-            setData(res);
-          
-        })
-        .catch((error)=>{
-            console.log(error);
-        })
-    },[])
+
+        if(props.authorization=="")
+        {
+            navigate('/signin');
+        }
+        else {
+        fetch(`http://127.0.0.1:3003/details/?id=${id}`).then((res)=>{
+                    return res.json();
+                    }).then((res)=>{
+                       console.log(res);
+                    setData([res]);
+                      
+                    })
+                    .catch((error)=>{
+                        console.log(error);
+                    })
+    }
+    
+},[])
 
 const onLike=()=>{
     const ele=document.getElementById('like');
@@ -40,8 +48,26 @@ const Follow=()=>{
     const ele=document.getElementById("follow");
 
     if(ele.innerHTML=="Follow")
-    {
-        ele.innerHTML="Following"
+    {   
+        
+
+        fetch(`http://127.0.0.1:3003/follow/?username=${data[0].author.username}`,{
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization':localStorage.Authorization
+                }
+        }).then((res)=>{
+                    return res.json();
+                    }).then((res)=>{
+                       console.log(res);
+                    
+                      
+                    })
+                    .catch((error)=>{
+                        console.log(error);
+                    })
+            ele.innerHTML="Following"
     }
     else
     {

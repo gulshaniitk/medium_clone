@@ -65,10 +65,10 @@ return response.json();
     const Edit=()=>{
 
   const btn=document.getElementById("p_edit");
-  let name=document.getElementById("p_name");
-  let username=document.getElementById("p_username");
-  let interest=document.getElementById("p_interest");
-  let speciality=document.getElementById("p_speciality");
+  let name=document.getElementById("p_name").children[0];
+  let username=document.getElementById("p_username").children[0];
+  let interest=document.getElementById("p_interest").children[0];
+  let speciality=document.getElementById("p_speciality").children[0];
 
   if(btn.innerHTML=="Edit")
   {
@@ -114,10 +114,10 @@ return response.json();
             {
                 user.map((values,idx)=>{
                     return <div>
-                                <p id="p_name">Full Name: {values.name}</p>
-                                <p id="p_username">UserName: {values.username}</p>
-                                <p id="p_interest">Interest: {values.interest}</p>
-                                <p id="p_speciality">Speciality: {values.speciality}</p>
+                                <p id="p_name">Full Name: <p>{values.name}</p></p>
+                                <p id="p_username">UserName: <p>{values.username}</p></p>
+                                <p id="p_interest">Interest: <p>{values.interest}</p></p>
+                                <p id="p_speciality">Speciality: <p>{values.speciality}</p></p>
                                 <button onClick={()=>{Edit()}} id="p_edit">Edit</button>
                                 
                                 <br /><br /><br />
@@ -127,7 +127,7 @@ return response.json();
                                 <div>
                                     {
                                         values.follows.map((x)=>{
-                                            return <p>x</p>
+                                            return <p>{x}</p>
                                         })
                                     }
                                 </div>
