@@ -1,3 +1,8 @@
+# Important: Run the Ruby Rails Server at port 3003.
+Server link:  https://github.com/amartya57/mediumapi
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
