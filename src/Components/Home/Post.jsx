@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import './Post.css'
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams,useNavigate, Link } from "react-router-dom";
 
 const Post=(props)=>{
 
@@ -109,7 +109,7 @@ const Follow=()=>{
              data.map((post,idx)=>{
                 return <div><div className="post_byid">
                 <h1 className="p_title">{post.title}</h1>
-               <p className="p_author">{post.author}<button className="follow" id="follow" onClick={()=>{Follow()}}>Follow</button></p>
+               <p className="p_author"><Link to={`/author/${post.author}`}>{post.author}</Link><button className="follow" id="follow" onClick={()=>{Follow()}}>Follow</button></p>
                 <img src={post.image_url} width={680} height={380} ></img>
                 <p className="p_text">{post.text}</p>
                 <p className="topic">{post.topic}</p>

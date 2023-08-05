@@ -114,25 +114,26 @@ setMypost([...temp]);
           formData.append('topic',topic.innerHTML);
           formData.append('id',id);
           
-            fetch(`http://127.0.0.1:3003/update`, 
-        { method: "POST",
-        headers: {
-            // 'Accept': 'application/json',
-            'Content-Type': 'application/json' ,
-            'Authorization': localStorage.Authorization
-          },
+//             fetch(`http://127.0.0.1:3003/update`, 
+//         { method: "POST",
+//         headers: {
+//             // 'Accept': 'application/json',
+//             // 'Content-Type': 'application/json' ,
+//             Authorization: localStorage.Authorization
+//           },
         
-        body: formData
-        })
-.then(response => {
-return response.json()} )
-.then(data => {
-console.log(data);
-setTemp([...temp]);
-})
-.catch(error => {
-console.error('Error:', error);
-});
+//         body: formData
+//         })
+// .then(response => {
+// return response.json()} )
+// .then(data => {
+// console.log("record updated",data);
+// // setTemp([...temp]);
+// })
+// .catch(error => {
+// console.error('Error:', error);
+// });
+
 img.style.display="none";
             topic.contentEditable=false;
             title.contentEditable=false;

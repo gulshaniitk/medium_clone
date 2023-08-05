@@ -11,6 +11,7 @@ import Profile from './Components/Profile/Profile';
 import Signout from './Components/Signout/Signout';
 import Post from './Components/Home/Post';
 import Home from './Components/Home/Home';
+import Author from './Components/Author/Author';
 
 
 
@@ -32,6 +33,7 @@ const router=createBrowserRouter([
     {path:'/mypost',element:<Mypost  authorization={authorization} setAuthorization={setAuthorization}  />},
     {path:'/signout',element:<Signout   authorization={authorization} setAuthorization={setAuthorization} />},
     {path:'/profile',element:<Profile   authorization={authorization} setAuthorization={setAuthorization}  />},
+    {path:'/author/:username', element:<Author  authorization={authorization} setAuthorization={setAuthorization} />}
   ],
 },
 // {
