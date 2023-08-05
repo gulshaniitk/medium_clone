@@ -38,7 +38,6 @@ const Signin = (props) => {
   const authorizationHeader = response.headers.get('Authorization');
    localStorage.Authorization=authorizationHeader;
    props.setAuthorization(authorizationHeader);
-   console.log("token",localStorage.Authorization)
   return response.json()} )
 .then(data => {
   console.log(data);

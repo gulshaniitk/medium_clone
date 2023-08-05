@@ -12,36 +12,23 @@ const navigate=useNavigate();
 
     const formik=useFormik({
         initialValues:{
-            title:"",author:"",text:"",topic:"",image:''
+            title:"",text:"",topic:"",image:''
         },
         onSubmit:(values,SubmitProps)=>{
  
           const imageInput = document.getElementById('image_input');
           const file = imageInput.files[0];
-          // console.log(file);
-          //  props.setMypost([...props.mypost,values]);
-          //  props.setCreate(false);
           const formData = new FormData();
           formData.append('image', file);
           formData.append('title',values.title);
-          formData.append('author',values.author);
           formData.append('text',values.text);
           formData.append('topic',values.topic);
-          console.log(values,localStorage.Authorization);
+          // console.log(values,props.authorization);
           fetch("http://127.0.0.1:3003/create", { method: "POST",
           headers: {
-            // 'Content-Type': 'application/json',
-            // 'Accept': 'application/json',
             'Authorization':localStorage.Authorization
             },
           body : formData
-          // body: JSON.stringify({
-          //   title:values.title,
-          //   author:values.author,
-          //   text:values.author,
-          //   image:file,
-          //   topic:values.topic
-          // })
           })
 .then(response => {
   return response.json()} )
@@ -62,7 +49,6 @@ const navigate=useNavigate();
             topic:Yup.string().required("Required"),
             title:Yup.string().required("Required"),
             // image:Yup.string().required("Required"),
-            author:Yup.string().required("Required"),
             text:Yup.string().required("Required")
             
         })
@@ -91,11 +77,6 @@ const navigate=useNavigate();
             {formik.touched.topic && formik.errors.topic?<div className='error'>{formik.errors.topic}</div>:null}
             </div>
 
-            <div className='field'>
-            <label for="author">Author</label>
-          <input type="text" placeholder="Enter the tuthor name" name="author" onBlur={formik.handleBlur} value={formik.values.author} onChange={formik.handleChange} />
-            {formik.touched.author && formik.errors.author?<div className='error'>{formik.errors.author}</div>:null}
-            </div>
 
             <div className='field'>
           <label for="image">Image</label>

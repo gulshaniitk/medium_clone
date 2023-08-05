@@ -7,7 +7,7 @@ const Signout = (props) => {
 
   useEffect(() => {
 
-    if(localStorage.hasOwnProperty('Authorization'))
+   
      fetch("http://127.0.0.1:3003/logout",{ method: 'DELETE',
     headers: {
       'Authorization': localStorage.Authorization

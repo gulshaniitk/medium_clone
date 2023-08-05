@@ -34,7 +34,7 @@ const Home = (props) => {
 
       let temp=data.filter((val)=>{
         console.log(val);
-        return (val.text.toLowerCase().includes(str)|| val.title.toLowerCase().includes(str) || val.author.name.toLowerCase().includes(str) || val.topic.name.toLowerCase().includes(str) );
+        return (val.text.toLowerCase().includes(str)|| val.title.toLowerCase().includes(str) || val.author.toLowerCase().includes(str) || val.topic.toLowerCase().includes(str) );
       })
      
       setShow([...temp]);
@@ -99,12 +99,12 @@ const Home = (props) => {
           show.map((post,idx)=>{
             return <div className="post">
                 <div className="left">
-                <p className="author">{post.author.name}</p>
+                <p className="author">{post.author}</p>
                 <Link to={`/post/${post.id}`} className="link"><h2 className="title">{post.title}</h2></Link>
                 <Link to={`/post/${post.id}`} className="link"><p className="text">{post.text.substr(0,200)}</p></Link>
                 <div className="lower">
                 <p className="date">{post.created_at.substr(0,10)}</p>
-                <p className="topic">{post.topic.name}</p>
+                <p className="topic">{post.topic}</p>
                 </div>
                 </div>
                 

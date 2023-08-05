@@ -20,12 +20,12 @@ const Mypost=(props)=>{
           
             fetch('http://127.0.0.1:3003/my_posts',{ method: 'GET',
             headers: {
-              'Authorization': props.authorization
+              'Authorization': localStorage.Authorization
             }
             }).then((response)=>{
         return response.json();
         }).then((data)=>{
-          
+          console.log(data);
             const urls = [];
             
             for(let i=0;i<data.articles.length;i++)
@@ -33,8 +33,11 @@ const Mypost=(props)=>{
                 let id=data.articles[i].id;
                 urls.push(`http://127.0.0.1:3003/details/?id=${id}`);
             }
+            console.log(urls);
 
-            Promise.all(urls.map(url => fetch(url)))
+            Promise.all(urls.map(url => fetch(url,{ 
+                headers: {'Authorization':localStorage.Authorization
+                }})))
     .then(responses => Promise.all(responses.map(response => response.json())))
     .then(data => {
       
@@ -45,20 +48,6 @@ const Mypost=(props)=>{
       console.error('Error fetching data:', error);
     });
 
-          
-                // fetch(`http://127.0.0.1:3003/details/?id=${id}`).then((res)=>{
-                //     return res.json();
-                //     }).then((res)=>{
-                //     //    console.log(res);
-                //     temp.push(res);
-                      
-                //     })
-                //     .catch((error)=>{
-                //         console.log(error);
-                //     })
-            
-            
-            
         })
         .catch((error)=>{
             console.log(error);
@@ -68,12 +57,13 @@ const Mypost=(props)=>{
    
 
     const Delete=(id)=>{
-      console.log(id);
+      console.log(id,localStorage.Authorization);
 
     fetch(`http://127.0.0.1:3003/delete/?id=${id}`,
     { method: 'DELETE',
     headers: {
-      'Authorization': props.authorization
+       
+      'Authorization': localStorage.Authorization
     }
     })
 .then(response => {
@@ -99,7 +89,10 @@ setMypost([...temp]);
         let text=document.getElementById(id).children[4];
         let btn=document.getElementById(id).children[9].children[0];
         let img=document.getElementById(id).children[3]
+        document.getElementById(id).children[2].style.display="none";
         img.style.display="block";
+        console.log(title,text,topic,btn);
+        
         if(btn.innerHTML=="Edit")
         {
             topic.contentEditable=true;
@@ -119,12 +112,14 @@ setMypost([...temp]);
           formData.append('title',title.innerHTML);
           formData.append('text',text.innerHTML);
           formData.append('topic',topic.innerHTML);
-          console.log(title.innerHTML,text.innerHTML,topic.innerHTML)
-            fetch(`http://127.0.0.1:3003/update/?id=${id}`, 
+          formData.append('id',id);
+          
+            fetch(`http://127.0.0.1:3003/update`, 
         { method: "POST",
         headers: {
-            
-            'Authorization': props.authorization
+            // 'Accept': 'application/json',
+            'Content-Type': 'application/json' ,
+            'Authorization': localStorage.Authorization
           },
         
         body: formData
@@ -146,6 +141,7 @@ img.style.display="none";
             topic.style.border="white";
             title.style.border="white";
             btn.innerHTML="Edit";
+            document.getElementById(id).children[2].style.display="block";
         }
 
     }
@@ -163,9 +159,9 @@ img.style.display="none";
                         mypost.map((values,idx)=>{
                             return <li id={values.id} className="list_post">
                                 <h3>{values.title}</h3>
-                                <h4 >Topic: <span >{values.topic.name}</span></h4>
+                                <h4 >Topic: <span >{values.topic}</span></h4>
                                 <img src={values.image_url} height={300} width={400}></img>
-                                <input style={{display:"none"}} type="file" accept="image/*"  />
+                                <input style={{display:"none"}} type="file" accept="image/*" />
                                 <p className="text_post">{values.text}</p>
                                 <p>Created on: {values.created_at.substr(0,10)}</p>
                                 <p>Likes: {values.likes.length}</p>
