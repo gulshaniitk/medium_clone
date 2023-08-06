@@ -8,7 +8,7 @@ const Home = (props) => {
   const navigate=useNavigate();
   const [data,setData]=useState([]);
   const [show,setShow]=useState([]);
-
+  const saved = [];
     useEffect(()=>{
         fetch('http://127.0.0.1:3003/?page=1&books_per_page=100000').then((response)=>{
         return response.json();
@@ -107,6 +107,12 @@ const Home = (props) => {
   setShow([...temp]);
 
   }
+  const Savedpost=()=>{
+    setShow([...saved]);
+  }
+  const Saved=(post)=>{
+    saved.push(post);
+  }
 
   return (
     <div>
@@ -125,6 +131,7 @@ const Home = (props) => {
         <button onClick={()=>{Views()}}>Top Posts</button>
         <button onClick={()=>{Recommend()}}>Recommended Posts</button>
         <button onClick={()=>{Topiclist()}}>Topics List</button>
+        <button onClick={()=>{Savedpost()}}>Saved Post</button>
         </div>
         
         <div>
@@ -147,6 +154,8 @@ const Home = (props) => {
                 <div className="lower">
                 <p className="date">{post.created_at.substr(0,10)}</p>
                 <p className="topic">{post.topic}</p>
+                <p>Reading Time: {post.reading_time_minute} minutes</p>
+                <button onClick={()=>{Saved(post)}}>Save for later</button>
                 </div>
                 </div>
                 

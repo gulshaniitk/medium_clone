@@ -55,6 +55,33 @@ const navigate=useNavigate();
     })
 
 
+  const save_draft=()=>{
+
+    
+    fetch("http://127.0.0.1:3003/create_draft", { method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+
+      'Authorization':localStorage.Authorization
+      },
+    body : JSON.stringify({
+      title:formik.values.title,
+      topic:formik.values.topic,
+      text:formik.values.text
+    })
+    })
+.then(response => {
+return response.json()} )
+.then(data => {
+console.log(data);
+formik.resetForm();
+props.setCreate(false);
+})
+.catch(error => {
+console.error('Error:', error);
+});
+  }
+
 
     return (
         <div>
@@ -89,7 +116,9 @@ const navigate=useNavigate();
           {formik.touched.text && formik.errors.text?<div className='error'>{formik.errors.text}</div>:null}
           </div>
 
-          <button type="submit">Create</button>
+      <div><button type="submit">Create</button>
+          <button onClick={()=>{save_draft()}} type="submit">Save as draft</button></div>
+          
           </div>
         </form>
       </div>

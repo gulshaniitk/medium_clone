@@ -8,6 +8,7 @@ const Mypost=(props)=>{
     const [create,setCreate]=useState(false);
     const [mypost,setMypost]=useState([]);
     const [temp,setTemp]=useState([1]);
+    const [mydraft,setMydraft]=useState([]);
 
 
     useEffect(()=>{
@@ -33,6 +34,25 @@ const Mypost=(props)=>{
         .catch((error)=>{
             console.log(error);
         })
+
+        fetch("http://127.0.0.1:3003/my_drafts", {
+            headers: {
+              'Authorization':localStorage.Authorization
+              }
+            })
+        .then(response => {
+        return response.json()} )
+        .then(data => {
+        console.log(data);
+        setMydraft([...data]);
+        })
+        .catch(error => {
+        console.error('Error:', error);
+        });
+
+       
+
+
         }
     },[create,temp])
    
@@ -62,6 +82,27 @@ setMypost([...temp]);
     }
 
    
+    const myDraft=()=>{
+
+        document.getElementById("your_draft").style.display="block";
+
+        fetch("http://127.0.0.1:3003/my_drafts", {
+    headers: {
+      'Authorization':localStorage.Authorization
+      }
+    })
+.then(response => {
+return response.json()} )
+.then(data => {
+console.log(data);
+setMydraft([...data]);
+})
+.catch(error => {
+console.error('Error:', error);
+});
+    }
+
+
 
     const Edit=(id)=>{
 
@@ -128,13 +169,78 @@ img.style.display="none";
 
     }
 
+const deletedraft=(id)=>{
+
+    fetch(`http://127.0.0.1:3003/draft_delete/?id=${id}`, {
+        method:"DELETE",
+        headers: {
+          'Authorization':localStorage.Authorization
+          }
+        })
+    .then(response => {
+    return response.json()} )
+    .then(data => {
+    console.log(data);
+     let temp=mydraft.filter((val)=>{
+        return val.id!=id;
+    })
+    setMydraft([...temp]);
+     
+    })
+    .catch(error => {
+    console.error('Error:', error);
+    });
+
+}
+
+const postdraft=(id)=>{
+
+    fetch(`http://127.0.0.1:3003/draft_post/?id=${id}`, {
+        method:"POST",
+        headers: {
+            'Content-Type': 'application/json',
+          'Authorization':localStorage.Authorization
+          }
+        })
+    .then(response => {
+    return response.json()} )
+    .then(data => {
+    console.log(data);
+     setTemp([1]);
+    })
+    .catch(error => {
+    console.error('Error:', error);
+    });
+
+    
+
+}
+
     
     return(
         <div>
             <button onClick={()=>{setCreate(!create)}} className="create_new">Create New</button>
+            <button onClick={()=>{myDraft()}} className="create_new">My Drafts</button>
             {create?<Newpost setCreate={setCreate} mypost={mypost} setMypost={setMypost}  />:null}
             <div>
-                <h2>Your Posts</h2>
+                <div>
+                    <h3  style={{margin:"30px"}} id="your_draft" style={{display:"none"}}>Your Drafts: {mydraft.length}</h3>
+                    <ol>
+                    {
+                        mydraft.map((values)=>{
+                            return <li><div>
+                                <h3>Title: {values.title}</h3>
+                                <h4 >Topic: <span >{values.topic.name}</span></h4>
+                                <p>{values.text}</p>
+                                <button onClick={()=>{deletedraft(values.id)}}>Delete</button>
+                                <button onClick={()=>{postdraft(values.id)}}>Post Online</button>
+                                </div></li>
+                        })
+                    }
+                    </ol>
+                </div>
+
+                <h2 style={{margin:"30px"}}>Your Posts</h2>
                 <ol>
                     {
                        
