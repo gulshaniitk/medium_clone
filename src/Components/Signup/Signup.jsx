@@ -74,7 +74,7 @@ useEffect(()=>{
 
         
         <div className='field'>
-          <label for="name">Name</label>
+          <label for="name">User Name</label>
           <input type="text" placeholder="Enter User Name" name="name" onBlur={formik.handleBlur} value={formik.values.name} onChange={formik.handleChange} />
             {formik.touched.name && formik.errors.name?<div className='error'>{formik.errors.name}</div>:null}
             </div>

@@ -1,16 +1,16 @@
-import { Link,Outlet, json } from "react-router-dom";
+import { Link,Outlet, json, useNavigate } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 import './Home.css'
 
 
 const Home = (props) => {
-
+  const navigate=useNavigate();
   const [data,setData]=useState([]);
   const [show,setShow]=useState([]);
 
     useEffect(()=>{
-        fetch('http://127.0.0.1:3003').then((response)=>{
+        fetch('http://127.0.0.1:3003/?page=1&books_per_page=100000').then((response)=>{
         return response.json();
         }).then((data)=>{
           console.log(data);
@@ -22,8 +22,42 @@ const Home = (props) => {
         })
     },[])
 
-   
+    const Recommend=()=>{
+      if(props.authorization=="")
+        {
+            navigate('/signin');
+        }
+        else{
+
+          
+          fetch('http://127.0.0.1:3003/profile',{ method: 'GET',
+          headers: {
+            'Authorization': props.authorization
+          }
+          }).then((response)=>{
+      return response.json();
+      }).then((profileinfo)=>{
+        
+          console.log(profileinfo);
+          const str1 = profileinfo.interest;
+          let temp1=data.filter((val)=>{
+            console.log(val);
+            return (val.title.toLowerCase().includes(str1) || val.topic.toLowerCase().includes(str1) );
+          })
+          
+          setShow([...temp1]);
+      })
+      .catch((error)=>{
+          console.log(error);
+      })
+        }
+        
+    }
+    const Topiclist=()=>{
+      navigate('/Topiclist');
+    }
     const Search=()=>{
+      let temp2=data;
       const str=document.getElementById("search").value.toLowerCase();
       
       if(str=="")
@@ -32,7 +66,7 @@ const Home = (props) => {
         return ;
       }
 
-      let temp=data.filter((val)=>{
+      let temp=temp2.filter((val)=>{
         console.log(val);
         return (val.text.toLowerCase().includes(str)|| val.title.toLowerCase().includes(str) || val.author.toLowerCase().includes(str) || val.topic.toLowerCase().includes(str) );
       })
@@ -42,17 +76,19 @@ const Home = (props) => {
       }
   
       const Likes=()=>{
-        show.sort((a,b)=>{
+        let temp2=data;
+        temp2.sort((a,b)=>{
           return b.likes.length-a.likes.lngth;
         })
-        setShow([...show]);
+        setShow([...temp2]);
       }
 
       const Views=()=>{
-        show.sort((a,b)=>{
+        let temp2=data;
+        temp2.sort((a,b)=>{
           return (b.views-a.views);
         })
-        setShow([...show]);
+        setShow([...temp2]);
       }
 
   const Filter=()=>{
@@ -85,6 +121,12 @@ const Home = (props) => {
         <button onClick={()=>{Likes()}}>Likes</button>
         <button onClick={()=>{Views()}}>Views</button>
         </div>
+        <div>
+        <button onClick={()=>{Views()}}>Top Posts</button>
+        <button onClick={()=>{Recommend()}}>Recommended Posts</button>
+        <button onClick={()=>{Topiclist()}}>Topics List</button>
+        </div>
+        
         <div>
         <label>Filter by</label>
         <input type="date" id="date" onChange={()=>{Filter()}}/>

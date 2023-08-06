@@ -25,29 +25,10 @@ const Mypost=(props)=>{
             }).then((response)=>{
         return response.json();
         }).then((data)=>{
-          console.log(data);
-            const urls = [];
+           //console.log(data);
             
-            for(let i=0;i<data.articles.length;i++)
-            {
-                let id=data.articles[i].id;
-                urls.push(`http://127.0.0.1:3003/details/?id=${id}`);
-            }
-            console.log(urls);
-
-            Promise.all(urls.map(url => fetch(url,{ 
-                headers: {'Authorization':localStorage.Authorization
-                }})))
-    .then(responses => Promise.all(responses.map(response => response.json())))
-    .then(data => {
-      
-        console.log(data);
-        setMypost([...data]);
-    })
-    .catch(error => {
-      console.error('Error fetching data:', error);
-    });
-
+           setMypost([...data.articles]);
+           console.log(mypost);
         })
         .catch((error)=>{
             console.log(error);
@@ -55,9 +36,9 @@ const Mypost=(props)=>{
         }
     },[create,temp])
    
-
+   
     const Delete=(id)=>{
-      console.log(id,localStorage.Authorization);
+    //   console.log(id,localStorage.Authorization);
 
     fetch(`http://127.0.0.1:3003/delete/?id=${id}`,
     { method: 'DELETE',
@@ -69,7 +50,7 @@ const Mypost=(props)=>{
 .then(response => {
 return response.json()} )
 .then(data => {
-console.log(data);
+// console.log(data);
 let temp=mypost.filter((val)=> val.id!=id);
 setMypost([...temp]);
 
@@ -91,7 +72,7 @@ setMypost([...temp]);
         let img=document.getElementById(id).children[3]
         document.getElementById(id).children[2].style.display="none";
         img.style.display="block";
-        console.log(title,text,topic,btn);
+        // console.log(title,text,topic,btn);
         
         if(btn.innerHTML=="Edit")
         {
@@ -160,13 +141,12 @@ img.style.display="none";
                         mypost.map((values,idx)=>{
                             return <li id={values.id} className="list_post">
                                 <h3>{values.title}</h3>
-                                <h4 >Topic: <span >{values.topic}</span></h4>
+                                <h4 >Topic: <span >{values.topic.name}</span></h4>
                                 <img src={values.image_url} height={300} width={400}></img>
                                 <input style={{display:"none"}} type="file" accept="image/*" />
-                                <p className="text_post">{values.text}</p>
-                                <p>Created on: {values.created_at.substr(0,10)}</p>
-                                <p>Likes: {values.likes.length}</p>
-                                <p>Comments: {values.comments.length}</p>
+                                <p>{values.text}</p>
+                                <p>Likes: {values.likes}</p>
+                                <p>Comments: {values.comments}</p>
                                 <p>Views: {values.views}</p>
                                 <div>
                                     <button onClick={()=>{Edit(values.id)}}>Edit</button>

@@ -8,7 +8,7 @@ const Post=(props)=>{
     const {id}=useParams();
     const [temp,setTemp]=useState([1]);
     const navigate=useNavigate();
-    console.log(id);
+    
 
     useEffect(()=>{
 
@@ -21,10 +21,18 @@ const Post=(props)=>{
                     return res.json();
                     }).then((res)=>{
                        console.log(res);
-                    setData([res]);
-                      
+                       console.log(res.author);
+                       if(res.message!=undefined )
+                       {
+                            navigate('/pay');
+                       }
+                       else
+                       {
+                       setData([res]);
+                       } 
                     })
                     .catch((error)=>{
+                        navigate('/signin');
                         console.log(error);
                     })
     }
@@ -43,7 +51,6 @@ const onLike=()=>{
     }).then((res)=>{
                 return res.json();
                 }).then((res)=>{
-                   console.log(res);
                    setTemp([...temp])
                   
                 })
@@ -59,12 +66,13 @@ const onLike=()=>{
 
  }
  else { ele.style.backgroundColor = "red";
- ele.style.color = "white";
-
- 
+    ele.style.color = "white";
+    }
 
 }
 
+const morePost=()=>{
+    navigate(`/Similarpost/${data[0].author}`);
 }
 
 const Follow=()=>{
@@ -85,11 +93,12 @@ const Follow=()=>{
         }).then((res)=>{
                     return res.json();
                     }).then((res)=>{
-                       console.log(res);
+                       
                     setTemp([...temp])
                       
                     })
                     .catch((error)=>{
+                        navigate('/signin');
                         console.log(error);
                     })
        
@@ -104,7 +113,8 @@ const Follow=()=>{
 
     return (
         <div>
-           <button onClick={()=>navigate(-1)} id="back">Back</button>
+           <button onClick={()=>navigate(-1)} className="back">Back</button>
+           <button onClick={()=>{morePost()}} className="back">More Post By Similar Author</button>
            {
              data.map((post,idx)=>{
                 return <div><div className="post_byid">
