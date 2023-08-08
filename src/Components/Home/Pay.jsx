@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Pay=()=>{
   const navigate=useNavigate();
+ const [val,setVal]=useState(0);
+
     const pay=()=>{
-        let val=document.getElementById("amount").value;
-        console.log(val);
 
         fetch(`http://127.0.0.1:3003/pay`,
         { method:"POST",
@@ -30,7 +31,7 @@ const Pay=()=>{
     return (
         <div>
         <h1>Pay the amount to view post</h1>
-        <input placeholder="Enter Amount" id="amount" value={100}></input>
+        <input placeholder="Enter Amount" id="amount" value={val} onChange={(e)=>{setVal(e.target.value)}}></input>
         <button onClick={()=>{pay();}}>Pay</button>
         </div>
     )

@@ -78,15 +78,18 @@ const Home = (props) => {
       const Likes=()=>{
         let temp2=data;
         temp2.sort((a,b)=>{
-          return b.likes.length-a.likes.lngth;
+          if(a.likes.length>b.likes.length) return -1;
+          return 1;
         })
+      
         setShow([...temp2]);
       }
 
       const Views=()=>{
         let temp2=data;
         temp2.sort((a,b)=>{
-          return (b.views-a.views);
+          if(a.views>b.views) return -1;
+          return 1;
         })
         setShow([...temp2]);
       }

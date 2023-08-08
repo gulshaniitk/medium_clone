@@ -14,6 +14,7 @@ import Home from './Components/Home/Home';
 import Author from './Components/Author/Author';
 import Pay from './Components/Home/Pay';
 import Topiclist from './Components/Home/Topiclist';
+import Mylibrary from './Components/Mypost/Mylibrary';
 
 
 
@@ -38,7 +39,8 @@ const router=createBrowserRouter([
     {path:'/author/:username', element:<Author  authorization={authorization} setAuthorization={setAuthorization} />},
     {path:'/Similarpost/:author',element:<Similarpost  authorization={authorization} setAuthorization={setAuthorization} />},
     {path:'/Pay',element:<Pay  authorization={authorization} setAuthorization={setAuthorization} />},
-    {path:'/Topiclist',element:<Topiclist  authorization={authorization} setAuthorization={setAuthorization} />}
+    {path:'/Topiclist',element:<Topiclist  authorization={authorization} setAuthorization={setAuthorization} />},
+    {path:'/mylibrary',element:<Mylibrary  authorization={authorization} setAuthorization={setAuthorization} />}
   ],
 },
 // {

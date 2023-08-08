@@ -216,72 +216,20 @@ const postdraft=(id)=>{
 
 }
 
-const createList=()=>{
-    
-    fetch(`http://127.0.0.1:3003/create_list`, {
-        method:"POST",
-        headers: {
-          'Authorization':localStorage.Authorization
-          }
-        })
-    .then(response => {
-    return response.json()} )
-    .then(data => {
-    console.log("list id",data);
-    })
-    .catch(error => {
-    console.error('Error:', error);
-    });
 
-    showList();
-
-}
-
-const showList=()=>{
-    let lists=[];
-    fetch(`http://127.0.0.1:3003/my_lists`, {
-        headers: {
-          'Authorization':localStorage.Authorization
-          }
-        })
-    .then(response => {
-    return response.json()} )
-    .then(data => {
-    console.log("list id",data);
-
-    let text=``;
-
-
-    for(let i=0;i<data.length;i++)
-    {
-        text+=`<button>${data[i].id}</button>`
-    }
-
-    document.getElementById("lists").innerHTML=text;
-    
-    })
-    .catch(error => {
-    console.error('Error:', error);
-    });
-
-    
-
-
-}
     
     return(
         <div>
             <button onClick={()=>{setCreate(!create)}} className="create_new">Create New</button>
             <button onClick={()=>{myDraft()}} className="create_new">My Drafts</button>
-            <button onClick={()=>{createList()}} className="create_new">Create List</button>
-            <button onClick={()=>{showList()}} className="create_new">Show Lists</button>
+            <button onClick={()=>{navigate('/mylibrary')}} className="create_new">My library</button>
             <div id="lists">
 
             </div>
             {create?<Newpost setCreate={setCreate} mypost={mypost} setMypost={setMypost}  />:null}
             <div>
                 <div>
-                    <h3  style={{margin:"30px"}} id="your_draft" style={{display:"none"}}>Your Drafts: {mydraft.length}</h3>
+                    <h3  style={{margin:"30px",display:"none"}} id="your_draft">Your Drafts: {mydraft.length}</h3>
                     <ol>
                     {
                         mydraft.map((values)=>{

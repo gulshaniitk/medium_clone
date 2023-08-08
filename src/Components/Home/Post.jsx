@@ -7,6 +7,7 @@ const Post=(props)=>{
     const [data,setData]=useState([]);
     const {id}=useParams();
     const [temp,setTemp]=useState([1]);
+    const [lists,setLists]=useState([]);
     const navigate=useNavigate();
     
 
@@ -35,6 +36,23 @@ const Post=(props)=>{
                         navigate('/signin');
                         console.log(error);
                     })
+
+        fetch(`http://127.0.0.1:3003/my_lists`, {
+            headers: {
+              'Authorization':localStorage.Authorization
+              }
+            })
+        .then(response => {
+        return response.json()} )
+        .then(response => {
+        setLists([...response]);
+
+        
+        })
+        .catch(error => {
+        console.error('Error:', error);
+        });
+
     }
     
 },[temp])
@@ -110,6 +128,35 @@ const Follow=()=>{
     }
 }
 
+const addtolist=(listid)=>{
+ 
+    
+
+    fetch(`http://127.0.0.1:3003/insert_article`, {
+        method:"POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization':localStorage.Authorization
+          },
+          body:JSON.stringify({
+            list_id:listid,
+            article_id:id
+          })
+        })
+    .then(response => {
+    return response.json()} )
+    .then(response => {
+    console.log(response);
+    document.getElementById(listid).style.background="#90EE90";
+
+    
+    })
+    .catch(error => {
+    console.error('Error:', error);
+    });
+
+}
+
 
     return (
         <div>
@@ -135,7 +182,14 @@ const Follow=()=>{
                 </div>
              })
            }
-            
+            <div>
+                <h4>Add to your library</h4>
+                {
+                lists.map((list)=>{
+                    return <button onClick={()=>{addtolist(list.id)}} id={list.id}>list {list.id}</button>
+                })
+            }
+            </div>
         
         </div>
     )
