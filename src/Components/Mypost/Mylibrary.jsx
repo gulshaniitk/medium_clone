@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
-const Mylibrary=()=>{
+const Mylibrary=(props)=>{
 
 
     const navigate=useNavigate();
@@ -16,7 +16,13 @@ const Mylibrary=()=>{
 
     useEffect(()=>{
        
-        
+        if(props.authorization=="")
+        {
+           
+            navigate('/signin');
+        }
+        else
+        {
 
         fetch('http://127.0.0.1:3003/?page=1&books_per_page=100000').then((response)=>{
             return response.json();
@@ -28,7 +34,7 @@ const Mylibrary=()=>{
             .catch((error)=>{
                 console.log(error);
             })
-
+        }
             
     
     },[listno])
