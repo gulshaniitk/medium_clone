@@ -45,7 +45,7 @@ const Author=(props)=>{
            <h1 style={{textAlign:"center",margin:"20px"}}>Author Information</h1>
            {
             info.map((val,idx)=>{
-                return  <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
+                return  <div key={idx} style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
                    <h3>Profile views: <span>{val.profile_views}</span></h3>
                    <h3>UserName: <span>{val.username}</span></h3>
                    <h3>Interests: <span>{val.interests}</span></h3>

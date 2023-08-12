@@ -13,6 +13,7 @@ useEffect(()=>{
 
   if(props.authorization!="")
   {
+    console.log(props.authorization)
     navigate('/');
   }
 
@@ -39,18 +40,30 @@ useEffect(()=>{
 .then(response => {
     const authorizationHeader = response.headers.get('Authorization');
   
+    if(authorizationHeader!=null)
+  {
     localStorage.Authorization=authorizationHeader;
     props.setAuthorization(authorizationHeader);
+  }
     return response.json()} )
 .then(data => {
-  console.log(data);
+  console.log(data.status);
+
+  if(data.status.code==200)
+  {
     SubmitProps.resetForm();
     setErrorSignUp("");
+  }
+  else
+{
+  setErrorSignUp(data.status.message);
+}
+    
 
   })
   .catch(error => {
     console.error('Error:', error);
-    setErrorSignUp("Email has already been taken");
+   
   });
               
         },

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react"
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
@@ -10,9 +11,11 @@ const Mylibrary=(props)=>{
 
     const [data,setData]=useState([]);
     const [listno,setListno]=useState(0);
+    const [name,setName]=useState("");
     const [articles,setArticles]=useState([]);
     const [temp,setTemp]=useState([1]);
     const [shared,setShared]=useState([]);
+    const [listName,setListName]=useState("");
 
     useEffect(()=>{
        
@@ -72,6 +75,7 @@ const Mylibrary=(props)=>{
             if(Object.keys(temp1).length==0)
             {
                 setListno(response[0].id)
+                setName(response[0].name)
                 setShared(response[0].shared_with)
                 temp1=response[0];
             }
@@ -95,6 +99,7 @@ const Mylibrary=(props)=>{
         else
         {
             setListno(0);
+            setName("");
             setShow([]);
         }
 
@@ -107,34 +112,53 @@ const Mylibrary=(props)=>{
   
 
     const createList=()=>{
-    
-        fetch(`http://127.0.0.1:3003/create_list`, {
-            method:"POST",
-            headers: {
-              'Authorization':localStorage.Authorization
-              }
+
+
+        axios.post('http://127.0.0.1:3003/create_list',{
+            name:listName
+        },{
+            headers:{
+                Authorization:localStorage.Authorization
+            }
+        }) .then(data => {
+            console.log(data);
+            showListData();
+            setListName("");
             })
-        .then(response => {
-        return response.json()} )
-        .then(data => {
-        console.log(data);
-        showListData();
-        })
-        .catch(error => {
-        console.error('Error:', error);
-        });
+            .catch(error => {
+            console.error('Error:', error);
+            });
+
+    
+        // fetch(`http://127.0.0.1:3003/create_list`, {
+        //     method:"POST",
+        //     headers: {
+        //       'Authorization':localStorage.Authorization
+        //       },
+              
+        //     })
+        // .then(response => {
+        // return response.json()} )
+        // .then(data => {
+        // console.log(data);
+        // showListData();
+        // })
+        // .catch(error => {
+        // console.error('Error:', error);
+        // });
     
     
     }
 
 
-    const showNewList=(x)=>{
+    const showNewList=(x,y)=>{
    
        
-        console.log("listno ",x);
+        // console.log("listno ",x);
         
         setListno(x);
-        console.log(listno);
+        setName(y);
+        // console.log(listno);
        
 
     }
@@ -247,17 +271,20 @@ const Mylibrary=(props)=>{
     return (
         <div>
         <button onClick={()=>{navigate(-1)}} className="create_new">Back</button>
-        <h1 style={{textAlign:"center"}}>Your Library</h1>
-        <div style={{display:"flex",justifyContent:"center"}}>
-            <button onClick={()=>{createList()}} className="create_new">Create New List</button>
+        <h1 style={{textAlign:"center",margin:"25px"}}>Your Library</h1>
+        <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+            <div>
+            <input id="list_name" placeholder="Enter list name.." value={listName} onChange={(e)=>setListName(e.target.value)}></input>
+            <button style={{margin:"0px 20px 0px 0px"}} onClick={()=>{createList()}} className="create_new">Create New List</button>
+            </div>
             {
                 lists.map((x)=>{
-                    return <button onClick={()=>{showNewList(x.id)}} className="create_new">list {x.id}</button>
+                    return <button onClick={()=>{showNewList(x.id,x.name)}} className="create_new">{x.name}</button>
                 })
             }
         </div>
          <div>
-            <h2 style={{textAlign:"center"}}>List :{listno}</h2>
+            <h2 style={{textAlign:"center"}}>{name}</h2>
          {
           show.map((post,idx)=>{
             return <div className="post" key={idx}>

@@ -13,6 +13,7 @@ const Signin = (props) => {
 
       if(props.authorization!="")
       {
+        console.log(props.authorization)
         navigate('/');
       }
 
@@ -36,14 +37,27 @@ const Signin = (props) => {
           })
 .then(response => {
   const authorizationHeader = response.headers.get('Authorization');
-   localStorage.Authorization=authorizationHeader;
-   props.setAuthorization(authorizationHeader);
+  console.log("authorization",authorizationHeader);
+  if(authorizationHeader!=null)
+  {
+    localStorage.Authorization=authorizationHeader;
+    props.setAuthorization(authorizationHeader);
+  }
+   
   return response.json()} )
 .then(data => {
   console.log(data);
-  SubmitProps.resetForm();
+  if('error' in data)
+  {
+    setErrorSignIn(data.error);
+  }
+  else
+  {
+    SubmitProps.resetForm();
   
-  setErrorSignIn("");
+    setErrorSignIn("");
+    navigate('/');
+  }
   
   
   
@@ -51,7 +65,8 @@ const Signin = (props) => {
 })
 .catch(error => {
   console.error('Error:', error);
-  setErrorSignIn("Email or Password is not correct!");
+  
+
 });
 
            
@@ -87,7 +102,7 @@ const Signin = (props) => {
 
 
         <button type="submit">SignIn</button>
-        {errorSignIn?<div className='error'>{errorSignIn}</div>:null}
+        {errorSignIn!=""?<div className='error'>{errorSignIn}</div>:null}
         </div>
       </form>
     </div>

@@ -2,13 +2,14 @@ import { Link,Outlet, json, useNavigate } from "react-router-dom";
 
 import { useEffect, useState } from "react";
 import './Home.css'
+import axios from "axios";
 
 
 const Home = (props) => {
   const navigate=useNavigate();
   const [data,setData]=useState([]);
   const [show,setShow]=useState([]);
-  const saved = [];
+  
     useEffect(()=>{
         fetch('http://127.0.0.1:3003/?page=1&books_per_page=100000').then((response)=>{
         return response.json();
@@ -111,10 +112,60 @@ const Home = (props) => {
 
   }
   const Savedpost=()=>{
-    setShow([...saved]);
+
+    if(props.authorization=="")
+    {
+      navigate("/signin")
+    }
+    {
+
+    
+
+    axios.get('http://127.0.0.1:3003/profile',{
+      headers:{
+        Authorization:localStorage.Authorization
+      }
+    }).then((res)=>{
+      const saved = [];
+      console.log(res.data)
+     
+      for(let i=0;i<data.length;i++)
+      {
+         for(let j=0;j<res.data.saved_posts.length;j++)
+         {
+          if(data[i].id==res.data.saved_posts[j])
+          {
+            saved.push(data[i]);
+          }
+         }
+      }
+      setShow([...saved]);
+      
+
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+
   }
+  }
+
+
   const Saved=(post)=>{
-    saved.push(post);
+  
+
+    axios.get(`http://127.0.0.1:3003/save/?id=${post.id}`,
+    {
+      headers:{
+        Authorization:localStorage.Authorization
+      }
+    }
+    ).then((res)=>{
+      console.log(res);
+    }).catch((err)=>{
+      console.log(err);
+    })
+
   }
 
   return (

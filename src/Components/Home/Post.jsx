@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import './Post.css'
 import { useParams,useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 const Post=(props)=>{
 
@@ -8,9 +9,14 @@ const Post=(props)=>{
     const {id}=useParams();
     const [temp,setTemp]=useState([1]);
     const [lists,setLists]=useState([]);
+    const [comment,setComment]=useState("");
+    const [comments,setComments]=useState([]);
+    const [user,setUser]=useState();
+    const [following,setFollowing]=useState(false);
+    const [liked,setLiked]=useState(false);
     const navigate=useNavigate();
     
-
+    
     useEffect(()=>{
 
         if(props.authorization=="")
@@ -29,7 +35,38 @@ const Post=(props)=>{
                        }
                        else
                        {
-                       setData([res]);
+                           
+
+                           axios.get('http://127.0.0.1:3003/profile',{
+                            headers:{
+                                Authorization:localStorage.Authorization
+                            }
+                        }).then((res1)=>{
+                            console.log(res1);
+                            
+                            for(let i=0;i<res1.data.follows.length;i++)
+                            {
+                                if(res1.data.follows[i]==res.author)
+                                {
+                                    setFollowing(true);
+                                }
+                            }
+
+                            for(let i=0;i<res.likes.length;i++)
+                            {
+                                if(res.likes[i]==res1.data.username)
+                                {
+                                    setLiked(true);
+                                }
+                            }
+                            setData([res]);
+                           setComments(res.comments);
+
+                        })
+                        .catch((err)=>{
+                            console.log(err);
+                        })
+
                        } 
                     })
                     .catch((error)=>{
@@ -100,11 +137,9 @@ const morePost=()=>{
 const Follow=()=>{
     const ele=document.getElementById("follow");
 
-    
+    setFollowing(!following);
 
-    if(ele.innerHTML=="Follow")
-    {   
-        
+    
         fetch(`http://127.0.0.1:3003/follow/?username=${data[0].author}`,{
             method: "POST",
             headers: {
@@ -125,11 +160,7 @@ const Follow=()=>{
                     })
        
             ele.innerHTML="Following"
-    }
-    else
-    {
-        ele.innerHTML="Follow"
-    }
+  
 }
 
 const addtolist=(listid)=>{
@@ -162,35 +193,69 @@ const addtolist=(listid)=>{
 }
 
 
+const Comment_post=()=>{
+  
+    axios.post('http://127.0.0.1:3003/comment',{
+        id:id,
+        comment:comment
+    },
+    {
+        headers:{
+            Authorization:localStorage.Authorization
+        }
+    }).then((res)=>{
+        console.log(res);
+        setComments(res.data.comments);
+    })
+    .catch((err)=>{
+        console.log(err);
+    })
+}
+
+
     return (
         <div>
            <button onClick={()=>navigate(-1)} className="back">Back</button>
            <button onClick={()=>{morePost()}} className="back">More Post By Similar Author</button>
            {
              data.map((post,idx)=>{
-                return <div key={idx}><div className="post_byid">
+                return <div key={idx}>
+                    <div className="post_byid">
                 <h1 className="p_title">{post.title}</h1>
-               <p className="p_author"><Link to={`/author/${post.author}`}>{post.author}</Link><button className="follow" id="follow" onClick={()=>{Follow()}}>Follow</button></p>
+               <p className="p_author"><Link to={`/author/${post.author}`}>{post.author}</Link><button className="follow" id="follow" onClick={()=>{Follow()}}>{following?"Following":"Follow"}</button></p>
                 <img src={post.image_url} width={680} height={380} ></img>
                 <p className="p_text">{post.text}</p>
                 <p className="topic">{post.topic}</p>
                 </div>
                 <div className="like_view">
-                <button id="like" onClick={()=>{onLike()}} className="like">Likes</button>
+                <button id="like" onClick={()=>{onLike()}} style={liked?{background:"red",color:"white"}:{background:"white",color:"black"}}  className="like">Like</button>
                 <span className="show_count">{post.likes.length}</span>
-                <button id="comment">Comments</button>
-                <span className="show_count">{post.comments.length}</span>
+                {/* <button id="comment">Comments</button>
+                <span className="show_count">{post.comments.length}</span> */}
                 <button id="views">Views</button>
                 <span className="show_count">{post.views}</span>
+                <h3>Comments :{comments.length}</h3>
+                {
+                    comments.map((val)=>{
+                        return <div>
+                            {val.user}: {val.comment}
+                        </div>
+                    })
+                }
+                </div>
+                
+                <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
+                <textarea rows="4" cols="50" id="comment_val" placeholder="Comment here..." onChange={(e)=>{setComment(e.target.value)}} value={comment}></textarea>
+                <button onClick={()=>{Comment_post()}}>Submit</button>
                 </div>
                 </div>
              })
            }
-            <div>
-                <h4>Add to your library</h4>
+            <div style={{margin:"20px",display:"flex"}}>
+                <h4 style={{margin:"5px"}}>Add to your library</h4>
                 {
                 lists.map((list,idx)=>{
-                    return <button key={idx} onClick={()=>{addtolist(list.id)}} id={list.id}>list {list.id}</button>
+                    return <button key={idx} onClick={()=>{addtolist(list.id)}} id={list.id}>{list.name}</button>
                 })
             }
             </div>

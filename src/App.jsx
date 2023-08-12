@@ -15,7 +15,7 @@ import Author from './Components/Author/Author';
 import Pay from './Components/Home/Pay';
 import Topiclist from './Components/Home/Topiclist';
 import Mylibrary from './Components/Mypost/Mylibrary';
-
+import History from './Components/History/History';
 
 
 const App=()=>{
@@ -40,7 +40,8 @@ const router=createBrowserRouter([
     {path:'/Similarpost/:author',element:<Similarpost  authorization={authorization} setAuthorization={setAuthorization} />},
     {path:'/Pay',element:<Pay  authorization={authorization} setAuthorization={setAuthorization} />},
     {path:'/Topiclist',element:<Topiclist  authorization={authorization} setAuthorization={setAuthorization} />},
-    {path:'/mylibrary',element:<Mylibrary  authorization={authorization} setAuthorization={setAuthorization} />}
+    {path:'/mylibrary',element:<Mylibrary  authorization={authorization} setAuthorization={setAuthorization} />},
+    {path:'/history/:id',element:<History  authorization={authorization} setAuthorization={setAuthorization} />}
   ],
 },
 // {

@@ -140,9 +140,9 @@ console.error('Error:', error);
             const file = img.files[0];
             const formData = new FormData();
           formData.append('image', file);
-          formData.append('title',title.innerHTML.replaceAll('$nbsp;',' '));
-          formData.append('text',text.innerHTML.replaceAll('$nbsp;',' '));
-          formData.append('topic',topic.innerHTML.replaceAll('$nbsp;',' '));
+          formData.append('title',title.innerHTML.replaceAll('&nbsp;',' '));
+          formData.append('text',text.innerHTML.replaceAll('&nbsp;',' '));
+          formData.append('topic',topic.innerHTML.replaceAll('&nbsp;',' '));
           formData.append('id',id);
        
           axios.patch('http://127.0.0.1:3003/update',formData,{
@@ -248,7 +248,7 @@ const editdraft=(id)=>{
         text_ele.style.border="none"
 
 
-        axios.post('http://127.0.0.1:3003/draft_update',{
+        axios.patch('http://127.0.0.1:3003/draft_update',{
                 id:id,
                 title:title_ele.innerText.replaceAll('&nbsp',' '),
                 topic:topic_ele.innerText.replaceAll('&nbsp',' '),
@@ -270,6 +270,10 @@ const editdraft=(id)=>{
 
 }
 
+const Revision_history=(id)=>{
+console.log(id);
+}
+
 
     
     return(
@@ -282,8 +286,8 @@ const editdraft=(id)=>{
             </div>
             {create?<Newpost setCreate={setCreate} mypost={mypost} setMypost={setMypost}  />:null}
             <div>
-                <div>
-                    <h1  style={{margin:"30px",display:"none",textAlign:"center"}} id="your_draft">Your Drafts: {mydraft.length}</h1>
+                <div  id="your_draft" style={{display:"none"}}>
+                    <h1  style={{margin:"30px",textAlign:"center"}}>Your Drafts: {mydraft.length}</h1>
                     <ol>
                     {
                         mydraft.map((values,idx)=>{
@@ -319,6 +323,8 @@ const editdraft=(id)=>{
                                 <div>
                                     <button onClick={()=>{Edit(values.id)}}>Edit</button>
                                     <button onClick={()=>{Delete(values.id)}}>Delete</button>
+                                    <button onClick={()=>{navigate(`/history/${values.id}`)}}>Revision history</button>
+                                    
                                 </div>
                             </li>
                         })

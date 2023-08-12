@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Profile=(props)=>{
  
@@ -42,21 +43,17 @@ const Profile=(props)=>{
 
 
     const saveChanges=(x1,x2,x3)=>{
-       
-        fetch(`http://127.0.0.1:3003/profile_edit?username=${user[0].username}`,{ method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      'Authorization': props.authorization
-    },
-    body:JSON.stringify({
-        name:x1,
-        speciality:x3,
-        interest:x2
-    })
-    }).then((response)=>{
-return response.json();
-}).then((data)=>{
+
+
+        axios.patch('http://127.0.0.1:3003/profile_edit',{
+            name:x1,
+            speciality:x3,
+            interest:x2
+        },{
+            headers:{
+                Authorization:localStorage.Authorization
+            }
+        }).then((data)=>{
   
     console.log("Saving the changes",data);
 })
@@ -93,10 +90,10 @@ return response.json();
     interest.contentEditable=false;
     speciality.contentEditable=false;
 
-    let x1=name.innerHTML;
-    let x3=interest.innerHTML;
-    let x4=speciality.innerHTML;
-
+    let x1=name.innerHTML.replaceAll('&nbsp;',' ');
+    let x3=interest.innerHTML.replaceAll('&nbsp;',' ');;
+    let x4=speciality.innerHTML.replaceAll('&nbsp;',' ');;
+    
     saveChanges(x1,x3,x4);
 
     
