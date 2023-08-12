@@ -2,10 +2,11 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup'
 import { useNavigate } from 'react-router-dom';
 import './post.css'
+import { useState } from 'react';
 
 const Newpost=(props)=>{
 
-
+const [click,setClick]=useState("");
   
 
 const navigate=useNavigate();
@@ -23,25 +24,59 @@ const navigate=useNavigate();
           formData.append('title',values.title);
           formData.append('text',values.text);
           formData.append('topic',values.topic);
-          // console.log(values,props.authorization);
-          fetch("http://127.0.0.1:3003/create", { method: "POST",
-          headers: {
-            'Authorization':localStorage.Authorization
-            },
-          body : formData
-          })
-.then(response => {
-  return response.json()} )
-.then(data => {
-  console.log(data);
-  SubmitProps.resetForm();
-  props.setCreate(false);
-  // navigate('/mypost');
+          
+          if(click=="create")
+          {
+            fetch("http://127.0.0.1:3003/create", { method: "POST",
+            headers: {
+              'Authorization':localStorage.Authorization
+              },
+            body : formData
+            })
+  .then(response => {
+    return response.json()} )
+  .then(data => {
+    console.log(data);
+    SubmitProps.resetForm();
+    props.setCreate(false);
+    // navigate('/mypost');
+  
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    if(error=="Sign up or login")
+    {
+        navigate('/signin');
+    }
+  });
+          }
+          else
+          {
+            fetch("http://127.0.0.1:3003/create_draft", { method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+        
+              'Authorization':localStorage.Authorization
+              },
+            body : JSON.stringify({
+              title:formik.values.title,
+              topic:formik.values.topic,
+              text:formik.values.text
+            })
+            })
+        .then(response => {
+        return response.json()} )
+        .then(data => {
+        console.log(data);
+        formik.resetForm();
+        props.setCreate(false);
+        })
+        .catch(error => {
+        console.error('Error:', error);
+        });
+          }
 
-})
-.catch(error => {
-  console.error('Error:', error);
-});
+         
 
 
         },
@@ -53,34 +88,6 @@ const navigate=useNavigate();
             
         })
     })
-
-
-  const save_draft=()=>{
-
-    
-    fetch("http://127.0.0.1:3003/create_draft", { method: "POST",
-    headers: {
-      'Content-Type': 'application/json',
-
-      'Authorization':localStorage.Authorization
-      },
-    body : JSON.stringify({
-      title:formik.values.title,
-      topic:formik.values.topic,
-      text:formik.values.text
-    })
-    })
-.then(response => {
-return response.json()} )
-.then(data => {
-console.log(data);
-formik.resetForm();
-props.setCreate(false);
-})
-.catch(error => {
-console.error('Error:', error);
-});
-  }
 
 
     return (
@@ -116,8 +123,9 @@ console.error('Error:', error);
           {formik.touched.text && formik.errors.text?<div className='error'>{formik.errors.text}</div>:null}
           </div>
 
-      <div><button type="submit">Create</button>
-          <button onClick={()=>{save_draft()}} type="submit">Save as draft</button></div>
+          <div>
+            <button onClick={()=>{setClick("create")}}>Create</button>
+          <button onClick={()=>{setClick("draft")}} >Save as draft</button></div>
           
           </div>
         </form>

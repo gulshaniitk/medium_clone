@@ -73,13 +73,13 @@ const Signin = (props) => {
         <div className='signin'>
 
             <div className='field'>
-        <label for="email">Email</label>
+        <label htmlFor="email">Email</label>
           <input type="text" placeholder="Enter your Email" name="email" onBlur={formik.handleBlur} value={formik.values.email} onChange={formik.handleChange}  />
           {formik.touched.email && formik.errors.email?<div className='error'>{formik.errors.email}</div>:null}
           </div>
 
 <div className='field'>
-          <label for="password">Password</label>
+          <label htmlFor="password">Password</label>
           <input type="text" placeholder="Enter Password" name="password" onBlur={formik.handleBlur} value={formik.values.password} onChange={formik.handleChange}  />
           {formik.touched.password && formik.errors.password?<div className='error'>{formik.errors.password}</div>:null}
 

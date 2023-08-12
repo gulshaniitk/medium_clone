@@ -19,6 +19,7 @@ const Topiclist=()=>{
     
     return(
         <div>
+            <button style={{margin:"10px",padding:"5px"}} onClick={()=>navigate(-1)}>Back</button>
             <h1>All Topic List</h1>
             <br></br>
             <div>

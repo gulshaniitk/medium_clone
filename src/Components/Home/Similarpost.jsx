@@ -14,9 +14,8 @@ const Similarpost=(props)=>{
             let temp1=filterdata.filter((data1)=>{
                 return (data1.author.toLowerCase().includes(author));
             })
-            console.log(filterdata[0].author);
+           
             setData(temp1);
-            console.log(data);
             console.log(temp1);
         })
         .catch((error)=>{
@@ -28,7 +27,7 @@ const Similarpost=(props)=>{
         <button onClick={()=>navigate(-1)} className="back">Back</button>
         {
           data.map((post,idx)=>{
-            return <div className="post">
+            return <div className="post" key={idx}>
                 <div className="left">
                 <p className="author">{post.author}</p>
                 <Link to={`/post/${post.id}`} className="link"><h2 className="title">{post.title}</h2></Link>

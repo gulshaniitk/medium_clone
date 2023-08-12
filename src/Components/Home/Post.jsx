@@ -33,8 +33,12 @@ const Post=(props)=>{
                        } 
                     })
                     .catch((error)=>{
-                        navigate('/signin');
+                        
                         console.log(error);
+                        if(error=="Sign up or login")
+                        {
+                            navigate('/signin');
+                        }
                     })
 
         fetch(`http://127.0.0.1:3003/my_lists`, {
@@ -164,7 +168,7 @@ const addtolist=(listid)=>{
            <button onClick={()=>{morePost()}} className="back">More Post By Similar Author</button>
            {
              data.map((post,idx)=>{
-                return <div><div className="post_byid">
+                return <div key={idx}><div className="post_byid">
                 <h1 className="p_title">{post.title}</h1>
                <p className="p_author"><Link to={`/author/${post.author}`}>{post.author}</Link><button className="follow" id="follow" onClick={()=>{Follow()}}>Follow</button></p>
                 <img src={post.image_url} width={680} height={380} ></img>
@@ -185,8 +189,8 @@ const addtolist=(listid)=>{
             <div>
                 <h4>Add to your library</h4>
                 {
-                lists.map((list)=>{
-                    return <button onClick={()=>{addtolist(list.id)}} id={list.id}>list {list.id}</button>
+                lists.map((list,idx)=>{
+                    return <button key={idx} onClick={()=>{addtolist(list.id)}} id={list.id}>list {list.id}</button>
                 })
             }
             </div>

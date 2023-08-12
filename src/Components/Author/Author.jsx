@@ -10,7 +10,7 @@ const Author=(props)=>{
    const [info,setInfo]=useState([]);
 
     useEffect(()=>{
-        console.log("token",localStorage.Authorization)
+        
         if(!localStorage.hasOwnProperty('Authorization'))
         {
            
@@ -38,19 +38,19 @@ const Author=(props)=>{
     },[])
 
 
- console.log(info)
+ 
     return (
         <div>
-            <button onClick={()=>{navigate(-1)}}>Back</button>
-           <h1>Author Information</h1>
+            <button onClick={()=>{navigate(-1)}} style={{margin:"10px",padding:"5px"}}>Back</button>
+           <h1 style={{textAlign:"center",margin:"20px"}}>Author Information</h1>
            {
             info.map((val,idx)=>{
-                return  <div>
-                   <h3>Profile views: <p>{val.profile_views}</p></h3>
-                   <h3>UserName: <p>{val.username}</p></h3>
-                   <h3>Interests: <p>{val.interests}</p></h3>
-                   <h3>Speciality: <p>{val.speciality}</p></h3>
-                   <h3>Articles: <p>{val.articles.length}</p></h3>
+                return  <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
+                   <h3>Profile views: <span>{val.profile_views}</span></h3>
+                   <h3>UserName: <span>{val.username}</span></h3>
+                   <h3>Interests: <span>{val.interests}</span></h3>
+                   <h3>Speciality: <span>{val.speciality}</span></h3>
+                   <h3>Articles: <span>{val.articles.length}</span></h3>
                </div>
             })
            }

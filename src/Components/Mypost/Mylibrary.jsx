@@ -247,8 +247,8 @@ const Mylibrary=(props)=>{
     return (
         <div>
         <button onClick={()=>{navigate(-1)}} className="create_new">Back</button>
-        <h1>Your Library</h1>
-        <div>
+        <h1 style={{textAlign:"center"}}>Your Library</h1>
+        <div style={{display:"flex",justifyContent:"center"}}>
             <button onClick={()=>{createList()}} className="create_new">Create New List</button>
             {
                 lists.map((x)=>{
@@ -257,10 +257,10 @@ const Mylibrary=(props)=>{
             }
         </div>
          <div>
-            <h1>List :{listno}</h1>
+            <h2 style={{textAlign:"center"}}>List :{listno}</h2>
          {
           show.map((post,idx)=>{
-            return <div className="post">
+            return <div className="post" key={idx}>
                 <div className="left">
                 <p className="author">{post.author}</p>
                 <Link to={`/post/${post.id}`} className="link"><h2 className="title">{post.title}</h2></Link>
@@ -278,20 +278,23 @@ const Mylibrary=(props)=>{
               </div>
           })
         }
-        <div>
+        <div style={{margin:"50px 20px 20px 100px"}}>
             <input style={{marginLeft:10}} id="user_name" placeholder="Enter user name"></input>
             <button onClick={()=>{shareList()}}>Share</button>
             <div>
                 <h3>Shared with :</h3>
                 {
-                    shared.map((ele)=>{
-                        return <div style={{margin:10}}><span>{ele}</span><button onClick={()=>{Unsharelist(ele)}}>Unshare</button></div>
+                    shared.map((ele,idx)=>{
+                        return <div key={idx} style={{margin:10}}><span>{ele}</span><button onClick={()=>{Unsharelist(ele)}}>Unshare</button></div>
                     })
                 }
             </div>
         </div>
          </div>
-         <button onClick={()=>{deleteList()}} className="create_new">Delete</button>
+         <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+         <button style={{padding:"10px",fontSize:"20px",color:"red"}} onClick={()=>{deleteList()}} className="create_new">Delete List</button>
+         </div>
+         
         </div>
         
     )

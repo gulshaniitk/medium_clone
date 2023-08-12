@@ -30,13 +30,19 @@ const Profile=(props)=>{
         })
         .catch((error)=>{
             console.log(error);
+
+            if(error=="Sign up or login")
+            {
+                navigate('/signin');
+            }
+
         })
         }
     },[])
 
 
     const saveChanges=(x1,x2,x3)=>{
-        console.log(x1,x2,x3);
+       
         fetch(`http://127.0.0.1:3003/profile_edit?username=${user[0].username}`,{ method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -102,26 +108,26 @@ return response.json();
     }
 
     return (
-        <div>
-            <h2>Your Profile</h2>
+        <div style={{margin:"20px"}}>
+            <h2 style={{margin:"10px",textAlign:"center"}}>Your Profile</h2>
             {
                 user.map((values,idx)=>{
-                    return <div>
-                                <p id="p_name">Full Name: <p>{values.name}</p></p>
+                    return <div key={idx} style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
+                                <p id="p_name">Full Name: <span>{values.name}</span></p>
                                 
-                                <p id="p_interest">Interest: <p>{values.interest}</p></p>
-                                <p id="p_speciality">Speciality: <p>{values.speciality}</p></p>
+                                <p id="p_interest">Interest: <span>{values.interest}</span></p>
+                                <p id="p_speciality">Speciality: <span>{values.speciality}</span></p>
                                 <button onClick={()=>{Edit()}} id="p_edit">Edit</button>
                                 
                                 <br /><br /><br />
-                                <p id="p_username">UserName: <p>{values.username}</p></p>
+                                <p id="p_username">UserName: <span>{values.username}</span></p>
                                 <p>Account created on: {values.created_at.substr(0,10)}</p>
                                 <p>Articles: {values.articles.length}</p>
-                                <h2>Follows: {values.follows.length}</h2>
+                                <h3>Follows: {values.follows.length}</h3>
                                 <div>
                                     {
-                                        values.follows.map((x)=>{
-                                            return <p>{x}</p>
+                                        values.follows.map((x,idx)=>{
+                                            return <p key={idx}>{x}</p>
                                         })
                                     }
                                 </div>

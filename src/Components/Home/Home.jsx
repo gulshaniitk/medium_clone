@@ -149,7 +149,7 @@ const Home = (props) => {
         
         {
           show.map((post,idx)=>{
-            return <div className="post">
+            return <div className="post" key={post.id} style={{borderBottom:"2px solid black"}}>
                 <div className="left">
                 <p className="author">{post.author}</p>
                 <Link to={`/post/${post.id}`} className="link"><h2 className="title">{post.title}</h2></Link>

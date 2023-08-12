@@ -7,6 +7,13 @@ const Signout = (props) => {
 
   useEffect(() => {
 
+    if(props.authorization=="")
+    {
+       
+        navigate('/signin');
+    }
+    else
+    {
    
      fetch("http://127.0.0.1:3003/logout",{ method: 'DELETE',
     headers: {
@@ -26,10 +33,13 @@ props.setAuthorization("");
     console.error('Error:', error);
 });
 
+    }
+
 
     
   }
 
+  
   
     ,[]);
 

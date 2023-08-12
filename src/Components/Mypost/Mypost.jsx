@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link,Outlet,useNavigate } from "react-router-dom";
 import Newpost from "./Newpost";
+import axios from "axios";
 
 const Mypost=(props)=>{
 
@@ -83,8 +84,16 @@ setMypost([...temp]);
 
    
     const myDraft=()=>{
-
-        document.getElementById("your_draft").style.display="block";
+        let ele=document.getElementById("your_draft");
+        if(ele.style.display=="block")
+        {
+            ele.style.display="none"
+        }
+        else 
+        {
+            ele.style.display="block"
+        }
+        
 
         fetch("http://127.0.0.1:3003/my_drafts", {
     headers: {
@@ -109,7 +118,7 @@ console.error('Error:', error);
         let title=document.getElementById(id).children[0];
         let topic=document.getElementById(id).children[1].children[0];
         let text=document.getElementById(id).children[4];
-        let btn=document.getElementById(id).children[9].children[0];
+        let btn=document.getElementById(id).children[8].children[0];
         let img=document.getElementById(id).children[3]
         document.getElementById(id).children[2].style.display="none";
         img.style.display="block";
@@ -131,30 +140,22 @@ console.error('Error:', error);
             const file = img.files[0];
             const formData = new FormData();
           formData.append('image', file);
-          formData.append('title',title.innerHTML);
-          formData.append('text',text.innerHTML);
-          formData.append('topic',topic.innerHTML);
+          formData.append('title',title.innerHTML.replaceAll('$nbsp;',' '));
+          formData.append('text',text.innerHTML.replaceAll('$nbsp;',' '));
+          formData.append('topic',topic.innerHTML.replaceAll('$nbsp;',' '));
           formData.append('id',id);
-          
-//             fetch(`http://127.0.0.1:3003/update`, 
-//         { method: "POST",
-//         headers: {
-//             // 'Accept': 'application/json',
-//             // 'Content-Type': 'application/json' ,
-//             Authorization: localStorage.Authorization
-//           },
-        
-//         body: formData
-//         })
-// .then(response => {
-// return response.json()} )
-// .then(data => {
-// console.log("record updated",data);
-// // setTemp([...temp]);
-// })
-// .catch(error => {
-// console.error('Error:', error);
-// });
+       
+          axios.patch('http://127.0.0.1:3003/update',formData,{
+            headers:{
+                'Authorization':localStorage.Authorization
+            }
+          }).then((res)=>{
+            console.log(res);
+          })
+          .catch((err)=>{
+            console.log(err);
+          })
+
 
 img.style.display="none";
             topic.contentEditable=false;
@@ -216,6 +217,59 @@ const postdraft=(id)=>{
 
 }
 
+const editdraft=(id)=>{
+
+    let list=document.getElementById(`draft_${id}`);
+    let btn=list.children[0].children[3];
+    let title_ele=list.children[0].children[0].children[0];
+    let topic_ele=list.children[0].children[1].children[0];
+    let text_ele=list.children[0].children[2];
+    console.log(title_ele,topic_ele,text_ele);
+
+    if(btn.innerHTML=="Edit")
+    {
+        btn.innerHTML="Save";
+        title_ele.contentEditable=true;
+        topic_ele.contentEditable=true;
+        text_ele.contentEditable=true;
+        title_ele.style.border="2px solid black"
+        topic_ele.style.border="2px solid black"
+        text_ele.style.border="2px solid black"
+
+    }
+    else
+    {
+        btn.innerHTML="Edit";
+        title_ele.contentEditable=false;
+        topic_ele.contentEditable=false;
+        text_ele.contentEditable=false;
+        title_ele.style.border="none"
+        topic_ele.style.border="none"
+        text_ele.style.border="none"
+
+
+        axios.post('http://127.0.0.1:3003/draft_update',{
+                id:id,
+                title:title_ele.innerText.replaceAll('&nbsp',' '),
+                topic:topic_ele.innerText.replaceAll('&nbsp',' '),
+                text:text_ele.innerText.replaceAll('&nbsp',' ')
+        },{
+            headers:{
+                Authorization:localStorage.Authorization
+            }
+        })
+        .then(res=>{
+            console.log(res);
+        })
+        .catch(error=>{
+            console.log(error);
+        })
+
+    }
+
+
+}
+
 
     
     return(
@@ -229,28 +283,31 @@ const postdraft=(id)=>{
             {create?<Newpost setCreate={setCreate} mypost={mypost} setMypost={setMypost}  />:null}
             <div>
                 <div>
-                    <h3  style={{margin:"30px",display:"none"}} id="your_draft">Your Drafts: {mydraft.length}</h3>
+                    <h1  style={{margin:"30px",display:"none",textAlign:"center"}} id="your_draft">Your Drafts: {mydraft.length}</h1>
                     <ol>
                     {
-                        mydraft.map((values)=>{
-                            return <li><div>
-                                <h3>Title: {values.title}</h3>
+                        mydraft.map((values,idx)=>{
+                            return <li id={`draft_${values.id}`} key={idx}>
+                                <div>
+                                <h3>Title: <span>{values.title}</span></h3>
                                 <h4 >Topic: <span >{values.topic.name}</span></h4>
                                 <p>{values.text}</p>
+                                <button onClick={()=>{editdraft(values.id)}}>Edit</button>
                                 <button onClick={()=>{deletedraft(values.id)}}>Delete</button>
                                 <button onClick={()=>{postdraft(values.id)}}>Post Online</button>
-                                </div></li>
+                                </div>
+                                </li>
                         })
                     }
                     </ol>
                 </div>
 
-                <h2 style={{margin:"30px"}}>Your Posts</h2>
+                <h1 style={{margin:"30px",textAlign:"center"}}>Your Posts </h1>
                 <ol>
                     {
                        
                         mypost.map((values,idx)=>{
-                            return <li id={values.id} className="list_post">
+                            return <li id={values.id} className="list_post" key={idx}>
                                 <h3>{values.title}</h3>
                                 <h4 >Topic: <span >{values.topic.name}</span></h4>
                                 <img src={values.image_url} height={300} width={400}></img>
