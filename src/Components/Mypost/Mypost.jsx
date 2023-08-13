@@ -151,6 +151,7 @@ console.error('Error:', error);
             }
           }).then((res)=>{
             console.log(res);
+            setTemp([...temp,1]);
           })
           .catch((err)=>{
             console.log(err);
@@ -281,6 +282,7 @@ console.log(id);
             <button onClick={()=>{setCreate(!create)}} className="create_new">Create New</button>
             <button onClick={()=>{myDraft()}} className="create_new">My Drafts</button>
             <button onClick={()=>{navigate('/mylibrary')}} className="create_new">My library</button>
+            <button onClick={()=>{navigate('/sharedList')}} className="create_new">Shared library</button>
             <div id="lists">
 
             </div>

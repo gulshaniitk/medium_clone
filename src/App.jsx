@@ -16,6 +16,8 @@ import Pay from './Components/Home/Pay';
 import Topiclist from './Components/Home/Topiclist';
 import Mylibrary from './Components/Mypost/Mylibrary';
 import History from './Components/History/History';
+import SharedList from './Components/Mypost/SharedList';
+import Saved from './Components/Home/Saved';
 
 
 const App=()=>{
@@ -38,9 +40,11 @@ const router=createBrowserRouter([
     {path:'/profile',element:<Profile   authorization={authorization} setAuthorization={setAuthorization}  />},
     {path:'/author/:username', element:<Author  authorization={authorization} setAuthorization={setAuthorization} />},
     {path:'/Similarpost/:author',element:<Similarpost  authorization={authorization} setAuthorization={setAuthorization} />},
-    {path:'/Pay',element:<Pay  authorization={authorization} setAuthorization={setAuthorization} />},
+    {path:'/pay/:id',element:<Pay  authorization={authorization} setAuthorization={setAuthorization} />},
     {path:'/Topiclist',element:<Topiclist  authorization={authorization} setAuthorization={setAuthorization} />},
     {path:'/mylibrary',element:<Mylibrary  authorization={authorization} setAuthorization={setAuthorization} />},
+    {path:'/sharedList',element:<SharedList  authorization={authorization} setAuthorization={setAuthorization} />},
+    {path:'/saved',element:<Saved  authorization={authorization} setAuthorization={setAuthorization} />},
     {path:'/history/:id',element:<History  authorization={authorization} setAuthorization={setAuthorization} />}
   ],
 },

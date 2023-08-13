@@ -16,6 +16,7 @@ const Mylibrary=(props)=>{
     const [temp,setTemp]=useState([1]);
     const [shared,setShared]=useState([]);
     const [listName,setListName]=useState("");
+    const [shareStatus,setShareStatus]=useState("");
 
     useEffect(()=>{
        
@@ -227,12 +228,21 @@ const Mylibrary=(props)=>{
         .then(response => {
         return response.json()} )
         .then(response => {
-        console.log("article deleted",response);
+        console.log(response);
         showListData();
+        if('error' in response)
+        {
+            setShareStatus(response.error);
+        }
+        else
+        {
+            setShareStatus("Shared succesfully")
+        }
         
         })
         .catch(error => {
         console.error('Error:', error);
+        
         });
 
 
@@ -306,8 +316,9 @@ const Mylibrary=(props)=>{
           })
         }
         <div style={{margin:"50px 20px 20px 100px"}}>
-            <input style={{marginLeft:10}} id="user_name" placeholder="Enter user name"></input>
+            <input style={{marginLeft:10}} id="user_name" placeholder="Enter user name" onChange={(e)=>{setShareStatus("")}}></input>
             <button onClick={()=>{shareList()}}>Share</button>
+            <p style={{color:"red"}}>{shareStatus}</p>
             <div>
                 <h3>Shared with :</h3>
                 {

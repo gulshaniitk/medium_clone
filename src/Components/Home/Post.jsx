@@ -31,7 +31,7 @@ const Post=(props)=>{
                        console.log(res.author);
                        if(res.message!=undefined )
                        {
-                            navigate('/pay');
+                            navigate(`/pay/${id}`);
                        }
                        else
                        {

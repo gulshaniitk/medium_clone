@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 
 const Pay=(props)=>{
   const navigate=useNavigate();
  const [val,setVal]=useState(100);
+ const {id}=useParams();
 
  useEffect(()=>{
     if(props.authorization=="")
     {
        
         navigate('/signin');
-    }
-   
-         
+    }        
  },[])
 
     const pay=()=>{
@@ -31,7 +30,7 @@ const Pay=(props)=>{
             return res.json();
             }).then((res)=>{
             console.log(res);
-            navigate('/');
+            navigate(-1);
             })
             .catch((error)=>{
                 console.log(error);
@@ -46,6 +45,7 @@ const Pay=(props)=>{
         <h1 style={{margin:"10px 0px"}}>Pay the amount to view post</h1>
         <input placeholder="Enter Amount" id="amount" value={val} onChange={(e)=>{setVal(e.target.value)}}></input>
         <button onClick={()=>{pay();}}>Pay</button>
+        <p style={{color:"red"}}>Your daily quota is over, upgrade plan or wait till tomorrow</p>
         </div>
     )
 }

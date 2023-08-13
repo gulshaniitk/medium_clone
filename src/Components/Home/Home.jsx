@@ -30,33 +30,33 @@ const Home = (props) => {
         }
         else{
 
-          
-          fetch('http://127.0.0.1:3003/profile',{ method: 'GET',
-          headers: {
-            'Authorization': props.authorization
-          }
-          }).then((response)=>{
-      return response.json();
-      }).then((profileinfo)=>{
-        
-          console.log(profileinfo);
-          const str1 = profileinfo.interest;
-          let temp1=data.filter((val)=>{
-            console.log(val);
-            return (val.title.toLowerCase().includes(str1) || val.topic.toLowerCase().includes(str1) );
-          })
-          
-          setShow([...temp1]);
+     
+      axios.get('http://127.0.0.1:3003/recommended',{
+        headers:{
+          Authorization:localStorage.Authorization
+        }
+      }).then((res)=>{
+        console.log(res);
+        setShow([...res.data.articles]);
+      }).catch((err)=>{
+        setShow([]);
+        console.log(err);
       })
-      .catch((error)=>{
-          console.log(error);
-      })
+
+
         }
         
     }
+
+
+
+
     const Topiclist=()=>{
       navigate('/Topiclist');
     }
+
+
+
     const Search=()=>{
       let temp2=data;
       const str=document.getElementById("search").value.toLowerCase();
@@ -86,10 +86,10 @@ const Home = (props) => {
         setShow([...temp2]);
       }
 
-      const Views=()=>{
+      const Comments=()=>{
         let temp2=data;
         temp2.sort((a,b)=>{
-          if(a.views>b.views) return -1;
+          if(a.comments.length>b.comments.length) return -1;
           return 1;
         })
         setShow([...temp2]);
@@ -111,44 +111,29 @@ const Home = (props) => {
   setShow([...temp]);
 
   }
-  const Savedpost=()=>{
 
-    if(props.authorization=="")
-    {
-      navigate("/signin")
-    }
-    {
 
-    
+  // const Savedpost=()=>{
 
-    axios.get('http://127.0.0.1:3003/profile',{
-      headers:{
-        Authorization:localStorage.Authorization
-      }
-    }).then((res)=>{
-      const saved = [];
-      console.log(res.data)
-     
-      for(let i=0;i<data.length;i++)
-      {
-         for(let j=0;j<res.data.saved_posts.length;j++)
-         {
-          if(data[i].id==res.data.saved_posts[j])
-          {
-            saved.push(data[i]);
-          }
-         }
-      }
-      setShow([...saved]);
-      
+  //   if(props.authorization=="")
+  //   {
+  //     navigate("/signin")
+  //   }
+  //   {
 
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
 
-  }
-  }
+  //   axios.get('http://127.0.0.1:3003/view_saved',{
+  //     headers:{
+  //       Authorization:localStorage.Authorization
+  //     }}).then((res)=>{
+  //         console.log(res.data.articles);
+  //         setShow([...res.data.articles]);
+  //     }).catch((err)=>{
+  //       console.log(err);
+  //     })
+
+  // }
+  // }
 
 
   const Saved=(post)=>{
@@ -168,6 +153,18 @@ const Home = (props) => {
 
   }
 
+
+  const TopPosts=()=>{
+
+    axios.get('http://127.0.0.1:3003/top_posts').then((res)=>{
+      console.log(res);
+      setShow([...res.data]);
+    }).catch((err)=>{
+      console.log(err);
+    })
+
+  }
+
   return (
     <div>
       
@@ -179,13 +176,13 @@ const Home = (props) => {
         <div>
         <label>Sort by</label>
         <button onClick={()=>{Likes()}}>Likes</button>
-        <button onClick={()=>{Views()}}>Views</button>
+        <button onClick={()=>{Comments()}}>Comments</button>
         </div>
         <div>
-        <button onClick={()=>{Views()}}>Top Posts</button>
+        <button onClick={()=>{TopPosts()}}>Top Posts</button>
         <button onClick={()=>{Recommend()}}>Recommended Posts</button>
         <button onClick={()=>{Topiclist()}}>Topics List</button>
-        <button onClick={()=>{Savedpost()}}>Saved Post</button>
+        <button onClick={()=>{navigate('/saved')}}>Saved Post</button>
         </div>
         
         <div>
