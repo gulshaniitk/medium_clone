@@ -138,6 +138,12 @@ const Home = (props) => {
 
   const Saved=(post)=>{
   
+    if(props.authorization=="")
+        {
+          navigate("/signin")
+        }
+        {
+    
 
     axios.get(`http://127.0.0.1:3003/save/?id=${post.id}`,
     {
@@ -147,10 +153,14 @@ const Home = (props) => {
     }
     ).then((res)=>{
       console.log(res);
+      if('error' in res.data && res.data.error=="Log in or sign up first")
+      {
+        navigate('/signout');
+      }
     }).catch((err)=>{
       console.log(err);
     })
-
+  }
   }
 
 

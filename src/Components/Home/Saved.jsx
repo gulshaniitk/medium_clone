@@ -27,6 +27,10 @@ const Saved=(props)=>{
             Authorization:localStorage.Authorization
           }}).then((res)=>{
               console.log(res.data.articles);
+              if('error' in res.data)
+              {
+               navigate('/signout')
+              }
               setShow([...res.data.articles]);
           }).catch((err)=>{
             console.log(err);
@@ -46,6 +50,10 @@ const Saved=(props)=>{
         }
         ).then((res)=>{
           console.log(res);
+          if('error' in res.data && res.data.error=="Log in or sign up first")
+          {
+            navigate('/signout');
+          }
           Savedpost();
         }).catch((err)=>{
           console.log(err);

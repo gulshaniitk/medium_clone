@@ -37,6 +37,10 @@ const navigate=useNavigate();
     return response.json()} )
   .then(data => {
     console.log(data);
+    if('message' in data && data.message=="Sign up or log in")
+    {
+      navigate('signout');
+    }
     SubmitProps.resetForm();
     props.setCreate(false);
     // navigate('/mypost');
@@ -68,6 +72,10 @@ const navigate=useNavigate();
         return response.json()} )
         .then(data => {
         console.log(data);
+        if('error' in data && data.error=="Sign up or login")
+        {
+          navigate('/signout');
+        }
         formik.resetForm();
         props.setCreate(false);
         })
@@ -100,25 +108,25 @@ const navigate=useNavigate();
 
 
           <div className='field'>
-          <label for="title">Title</label>
+          <label htmlFor="title">Title</label>
           <input type="text" placeholder="Enter the title" name="title" onBlur={formik.handleBlur} value={formik.values.title} onChange={formik.handleChange}  />
           {formik.touched.title && formik.errors.title?<div className='error'>{formik.errors.title}</div>:null}
           </div>
 
           <div className='field'>
-          <label for="topic">Topic</label>
+          <label htmlFor="topic">Topic</label>
           <input type="text" placeholder="Enter the topic" name="topic" onBlur={formik.handleBlur} value={formik.values.topic} onChange={formik.handleChange} />
             {formik.touched.topic && formik.errors.topic?<div className='error'>{formik.errors.topic}</div>:null}
             </div>
 
 
             <div className='field'>
-          <label for="image">Image</label>
+          <label htmlFor="image">Image</label>
           <input type="file" accept="image/*" id='image_input' placeholder="Enter the image url" name="image" onBlur={formik.handleBlur}   />
           </div>
 
           <div className='field'>
-          <label for="text">Text</label>
+          <label htmlFor="text">Text</label>
           <textarea rows="10" cols="100" type="text" placeholder="Enter the text" name="text" onBlur={formik.handleBlur} value={formik.values.text} onChange={formik.handleChange}  />
           {formik.touched.text && formik.errors.text?<div className='error'>{formik.errors.text}</div>:null}
           </div>

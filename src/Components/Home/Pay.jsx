@@ -30,6 +30,12 @@ const Pay=(props)=>{
             return res.json();
             }).then((res)=>{
             console.log(res);
+
+            if('message' in res && res['message']== "Sign up or log in")
+            {
+                navigate('/signout');
+            }
+
             navigate(-1);
             })
             .catch((error)=>{

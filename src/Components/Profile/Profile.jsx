@@ -27,15 +27,20 @@ const Profile=(props)=>{
         }).then((data)=>{
           
             console.log(data);
-           setUser([data]);
+
+            if('error' in data)
+            {
+                navigate('/signout')
+            }
+            else
+            {
+                setUser([data]);
+            }
+
+           
         })
         .catch((error)=>{
             console.log(error);
-
-            if(error=="Sign up or login")
-            {
-                navigate('/signin');
-            }
 
         })
         }
@@ -54,7 +59,11 @@ const Profile=(props)=>{
                 Authorization:localStorage.Authorization
             }
         }).then((data)=>{
-  
+            if('error' in data)
+            {
+                navigate('/signout')
+            }
+           
     console.log("Saving the changes",data);
 })
 .catch((error)=>{

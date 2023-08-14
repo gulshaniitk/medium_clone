@@ -28,8 +28,17 @@ const Mypost=(props)=>{
         return response.json();
         }).then((data)=>{
            //console.log(data);
-            
-           setMypost([...data.articles]);
+           
+           if('error' in data)
+           {
+            navigate('/signout')
+           }
+           else
+           {
+            setMypost([...data.articles]);
+           }
+
+          
            console.log(mypost);
         })
         .catch((error)=>{
@@ -45,6 +54,10 @@ const Mypost=(props)=>{
         return response.json()} )
         .then(data => {
         console.log(data);
+        if('error' in data && data.error=="Sign up or login")
+        {
+         navigate('/signout')
+        }
         setMydraft([...data]);
         })
         .catch(error => {
@@ -72,6 +85,10 @@ const Mypost=(props)=>{
 return response.json()} )
 .then(data => {
 // console.log(data);
+if('message' in data && data.message=="Sign up or log in")
+{
+    navigate('/signout');
+}
 let temp=mypost.filter((val)=> val.id!=id);
 setMypost([...temp]);
 
@@ -104,6 +121,10 @@ setMypost([...temp]);
 return response.json()} )
 .then(data => {
 console.log(data);
+if('error' in data && data.error=="Sign up or login")
+{
+ navigate('/signout')
+}
 setMydraft([...data]);
 })
 .catch(error => {
@@ -151,6 +172,11 @@ console.error('Error:', error);
             }
           }).then((res)=>{
             console.log(res);
+
+            if('message' in res.data && res.data.message=="Sign up or log in")
+            {
+                navigate('/signout');
+            }
             setTemp([...temp,1]);
           })
           .catch((err)=>{
@@ -183,6 +209,10 @@ const deletedraft=(id)=>{
     return response.json()} )
     .then(data => {
     console.log(data);
+    if('message' in data && data.message=="Sign up or log in")
+    {
+        navigate('signout');
+    }
      let temp=mydraft.filter((val)=>{
         return val.id!=id;
     })
@@ -208,6 +238,10 @@ const postdraft=(id)=>{
     return response.json()} )
     .then(data => {
     console.log(data);
+    if('message' in data && data.message=="Sign up or log in")
+    {
+        navigate('/signout');
+    }
      setTemp([1]);
     })
     .catch(error => {
@@ -261,6 +295,10 @@ const editdraft=(id)=>{
         })
         .then(res=>{
             console.log(res);
+            if('error' in res.data && res.data.error=="Sign up or log in")
+            {
+                navigate('/signout');
+            }
         })
         .catch(error=>{
             console.log(error);

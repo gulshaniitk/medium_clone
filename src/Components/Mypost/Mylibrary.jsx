@@ -32,8 +32,13 @@ const Mylibrary=(props)=>{
             return response.json();
             }).then((data)=>{
             //   console.log(data);
+
+           
                 setData(data);
                 showListData();
+            
+
+                
             })
             .catch((error)=>{
                 console.log(error);
@@ -56,6 +61,12 @@ const Mylibrary=(props)=>{
 
 
             console.log(response,listno);
+
+            if('error' in response)
+            {
+                navigate('/signout')
+            }
+
             setLists(response);
             if(response.length!=0)
             {
@@ -80,7 +91,7 @@ const Mylibrary=(props)=>{
                 setShared(response[0].shared_with)
                 temp1=response[0];
             }
-            console.log(listno,temp1,data);
+           
             let temp2=[];
             for(let i=0;i<data.length;i++)
             {
@@ -93,7 +104,6 @@ const Mylibrary=(props)=>{
                     }
                 }
             }
-            console.log(temp1,temp2);
            setShow([...temp2]);
        
         }
@@ -123,6 +133,10 @@ const Mylibrary=(props)=>{
             }
         }) .then(data => {
             console.log(data);
+            if('message' in data.data && data.data.message=="Sign up or log in")
+            {
+                navigate('/signout');
+            }
             showListData();
             setListName("");
             })
@@ -178,7 +192,10 @@ const Mylibrary=(props)=>{
         .then(response => {
         return response.json()} )
         .then(response => {
-         
+         if('error' in response && response.error=="Sign up or login")
+         {
+            navigate('/signout');
+         }
          showListData();
         
         })
@@ -204,6 +221,10 @@ const Mylibrary=(props)=>{
         return response.json()} )
         .then(response => {
         console.log("article deleted",response);
+        if('error' in response && response.error=="Sign up or login")
+        {
+            navigate('/signout');
+        }
         showListData();
         
         })
@@ -229,6 +250,10 @@ const Mylibrary=(props)=>{
         return response.json()} )
         .then(response => {
         console.log(response);
+        if('error' in response && response.error=="Sign up or login")
+        {
+            navigate('/signout');
+        }
         showListData();
         if('error' in response)
         {
@@ -266,6 +291,10 @@ const Mylibrary=(props)=>{
         return response.json()} )
         .then(response => {
         console.log("article deleted",response);
+        if('error' in response && response.error=="Sign up or login")
+        {
+            navigate('/signout');
+        }
         showListData();
         
         })
@@ -288,8 +317,8 @@ const Mylibrary=(props)=>{
             <button style={{margin:"0px 20px 0px 0px"}} onClick={()=>{createList()}} className="create_new">Create New List</button>
             </div>
             {
-                lists.map((x)=>{
-                    return <button onClick={()=>{showNewList(x.id,x.name)}} className="create_new">{x.name}</button>
+                lists.map((x,idx)=>{
+                    return <button key={idx} onClick={()=>{showNewList(x.id,x.name)}} className="create_new">{x.name}</button>
                 })
             }
         </div>

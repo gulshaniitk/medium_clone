@@ -23,9 +23,9 @@ const Topiclist=()=>{
             <br></br>
             <div>
             <ol>
-               {topicsSet.map((val)=>{
+               {topicsSet.map((val,idx)=>{
                 if(val.name=="") return null;
-                return <li>{val.name}</li>
+                return <li key={idx}>{val.name}</li>
                })}
             </ol>
             </div>

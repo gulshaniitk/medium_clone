@@ -24,6 +24,10 @@ const History=(props)=>{
             }
         }).then((res)=>{
             console.log(res);
+            if('error' in res.data  && res.data.error=="Sign up or log in")
+            {
+                navigate('/signout');
+            }
             setHistory(res.data.history);
         }).catch((err)=>{
             console.log(err);
@@ -43,7 +47,7 @@ const History=(props)=>{
                 <ol>
                 {
                     history.map((post,idx)=>{
-                        return <li>
+                        return <li key={idx}>
                             <div>
                             <h3>Title: <span>{post.title}</span></h3>
                             <h3>Topic: <span >{post.topic}</span></h3>

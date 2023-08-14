@@ -28,6 +28,10 @@ const Post=(props)=>{
                     return res.json();
                     }).then((res)=>{
                        console.log(res);
+                       if('message' in res && res.message=="Sign up or log in")
+                       {
+                        navigate('/signout');
+                       }
                        console.log(res.author);
                        if(res.message!=undefined )
                        {
@@ -43,7 +47,10 @@ const Post=(props)=>{
                             }
                         }).then((res1)=>{
                             console.log(res1);
-                            
+                            if('error' in res1.data)
+            {
+                navigate('/signout')
+            }
                             for(let i=0;i<res1.data.follows.length;i++)
                             {
                                 if(res1.data.follows[i]==res.author)
@@ -72,10 +79,7 @@ const Post=(props)=>{
                     .catch((error)=>{
                         
                         console.log(error);
-                        if(error=="Sign up or login")
-                        {
-                            navigate('/signin');
-                        }
+                       
                     })
 
         fetch(`http://127.0.0.1:3003/my_lists`, {
@@ -86,6 +90,12 @@ const Post=(props)=>{
         .then(response => {
         return response.json()} )
         .then(response => {
+
+            if('error' in response && response.error=="Sign up or login")
+            {
+                navigate('/signout');
+            }
+
         setLists([...response]);
 
         
@@ -110,6 +120,11 @@ const onLike=()=>{
     }).then((res)=>{
                 return res.json();
                 }).then((res)=>{
+
+                    if('error' in res && res.error=="Sign up or log in")
+                    {
+                        navigate('/signout');
+                    }
                    setTemp([...temp])
                   
                 })
@@ -182,6 +197,10 @@ const addtolist=(listid)=>{
     return response.json()} )
     .then(response => {
     console.log(response);
+    if('error' in response && response.error=="Sign up or login")
+    {
+        navigate('/signout');
+    }
     document.getElementById(listid).style.background="#90EE90";
 
     
@@ -205,6 +224,10 @@ const Comment_post=()=>{
         }
     }).then((res)=>{
         console.log(res);
+        if('message' in res.data && res.data.message=="Sign up or log in")
+        {
+            navigate('/signout');
+        }
         setComments(res.data.comments);
     })
     .catch((err)=>{
@@ -236,8 +259,8 @@ const Comment_post=()=>{
                 <span className="show_count">{post.views}</span>
                 <h3>Comments :{comments.length}</h3>
                 {
-                    comments.map((val)=>{
-                        return <div>
+                    comments.map((val,idx)=>{
+                        return <div key={idx}>
                             {val.user}: {val.comment}
                         </div>
                     })

@@ -31,6 +31,10 @@ const SharedList=(props)=>{
                     }
                    }).then((res1)=>{
                     console.log(res1);
+                    if('error' in res1.data)
+                    {
+                     navigate('/signout')
+                    }
                     setLists(res1.data['shared lists']);
                     const temp=res1.data['shared lists'];
                     let ans=[];
